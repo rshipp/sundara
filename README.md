@@ -21,8 +21,8 @@ The stated goals of this project are as follows:
 
 ### What does the name mean?
 Sundara jāla can be translated (more or less literally) from Sanskrit as
-"beautiful web." I don't know Sanskrit, and am relying solely on online
-translators, so don't quote me on that.
+"beautiful web." (But I don't know Sanskrit, and am relying solely on
+online translators, so don't quote me on that.)
 
 ### Installation
 
