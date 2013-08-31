@@ -107,7 +107,7 @@ Sundara supports that too:
     $ sundara generate
 
 The new page will be placed on your site as 
-http://yoursite.com/mysubdir/mynewpage.md
+http://yoursite.com/mysubdir/mynewpage
 
 If you want to create s subdirectory with the same name as one of
 the folders Sundara creates, that's possible too (although a little
