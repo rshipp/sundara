@@ -63,10 +63,16 @@ a shiny new website, run:
 
     $ sundara generate
 
-The site files will be placed in the `www\` subdirectory. You should
-never need to edit these files (if you do, all your changes will be
-overwritten the next time you run `sundara generate`). Just copy
-them directly on to your web server, and you're ready to go.
+The site files will be placed in the `www\` subdirectory by default.
+You should never need to edit these files (if you do, all your
+changes will be overwritten the next time you run `sundara generate`).
+Just copy them directly on to your web server, and you're ready to go.
+
+If you need to change the default site directory to something else (to
+avooid conflicts with a subdiirectory in your site, for example), just
+tell Sundara where to put the files explicityly:
+
+    $ sundara generate mywwwwfiles
 
 Just like django, Sundara comes with a small built-in development
 server, so you can test your changes instantly:
@@ -108,18 +114,6 @@ Sundara supports that too:
 
 The new page will be placed on your site as 
 http://yoursite.com/mysubdir/mynewpage
-
-If you want to create s subdirectory with the same name as one of
-the folders Sundara creates, that's possible too (although a little
-more complicated). Say you want to put a page on your site as
-http://yoursite.com/www/mywebtips
-
-    $ mkdir www_files  # You can call this folder whatever you want.
-    $ vim www_files/mywebtips.md  # Write that amazing content.
-    $ sundara add www_files/mywebtips.md --as www/mywebtips
-
-Note: You can use the `--as` flag for any page, but you are
-encouraged to avoid it if at all possible.
 
 #### Changing the look of your site
 Websites generated with Sundara will use the generic bootstrap CSS
