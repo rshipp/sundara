@@ -133,17 +133,18 @@ you can do that too.
 ### Hacking
 The source is Python 3, and is freely available under a "New BSD" or
 "BSD 3-clause" license. You are encouraged, but not required, to
-contribute any changes you make back to the project. The development
-cycle for Sundara most closely resembles git-flow; in other words,
-please DO NOT submit pull requests to the `master` branch; new features
-are developed in a branch named after them (for example, if you wanted to
-add support for embedded videos, you might create a branch called
-`video-support`), and bugs are fixed in the `bugfix` branch. New features
-will be developed in their own branches and eventually merged into
-`development` to be tested, while bugfixes will be commited to the
-`bugfix` branch and merged into `development` when they are in a
-working state. At arbitrary intervals when the code is determined to
-be (mostly) bug-free and contain the planned features for a version,
-it will be merged into `master` and tagged as a new release.
+contribute any changes you make back to the project.
 
-Have fun!
+The development cycle for Sundara most closely resembles git-flow;
+in other words, please DO NOT submit pull requests to the `master` branch.
+New features are developed in a branch named after them (for example, if
+you wanted to add support for embedded videos, you might create a branch
+called `video-support`), and bugs are fixed in the `bugfix` branch. New
+features will be developed in their own branches and eventually merged
+into `development` to be tested, while bugfixes will be commited to the
+`bugfix` branch and merged into `development` when they are in a working
+state. At arbitrary intervals when the code is determined to be (mostly)
+bug-free and contain the planned features for a version, it will be merged
+into `master` and tagged as a new release.
+
+### Have fun!
