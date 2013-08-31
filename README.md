@@ -70,7 +70,7 @@ Just copy them directly on to your web server, and you're ready to go.
 
 If you need to change the default site directory to something else (to
 avooid conflicts with a subdiirectory in your site, for example), just
-tell Sundara where to put the files explicityly:
+tell Sundara where to put the files explicitly:
 
     $ sundara generate mywwwwfiles
 
