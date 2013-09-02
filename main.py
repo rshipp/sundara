@@ -7,10 +7,7 @@
    Should probably be installed as '/usr/bin/sundara'.
 """
 
-# Global imports
-import argparse
-
-# Local imports
+import args
 import sundara, jala
 
 def main():
