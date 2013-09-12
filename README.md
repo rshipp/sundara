@@ -1,4 +1,4 @@
-# Sundara jāla
+﻿# Sundara jāla
 ## For a beautiful web.
 
 ### What is it?
@@ -69,7 +69,7 @@ changes will be overwritten the next time you run `sundara generate`).
 Just copy them directly on to your web server, and you're ready to go.
 
 If you need to change the default site directory to something else (to
-avooid conflicts with a subdiirectory in your site, for example), just
+avoid conflicts with a subdiirectory in your site, for example), just
 tell Sundara where to put the files explicitly:
 
     $ sundara generate mywwwwfiles
@@ -117,7 +117,7 @@ http://yoursite.com/mysubdir/mynewpage
 
 #### Changing the look of your site
 Websites generated with Sundara will use the generic bootstrap CSS
-filles by default. If you want to do some bootstrap subclassing,
+files by default. If you want to do some bootstrap subclassing,
 or even remove bootstrap altogether and use your own stylesheets,
 you can do that too. 
 
