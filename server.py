@@ -12,7 +12,7 @@ from http.server import HTTPServer
 from SundaraRequestHandler import SundaraRequestHandler
 
 class SundaraServer:
-    def __init__(ip='', port=8080):
+    def __init__(ip='127.0.0.1', port=8080):
         self.ip = ip
         self.port = port
 
