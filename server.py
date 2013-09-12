@@ -8,4 +8,15 @@
    environments.
 """
 
+from http.server import HTTPServer
+from SundaraRequestHandler import SundaraRequestHandler
 
+class SundaraServer:
+    def __init__(ip='', port=8080):
+        self.ip = ip
+        self.port = port
+
+    def run():
+        httpd = HTTPServer((self.ip, self.port),
+                    SundaraRequestHandler)
+        httpd.serve_forever()
