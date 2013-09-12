@@ -12,11 +12,11 @@ from http.server import HTTPServer
 from SundaraRequestHandler import SundaraRequestHandler
 
 class SundaraServer:
-    def __init__(ip='127.0.0.1', port=8080):
+    def __init__(self, ip='127.0.0.1', port=8080):
         self.ip = ip
         self.port = port
 
-    def run():
+    def run(self):
         httpd = HTTPServer((self.ip, self.port),
                     SundaraRequestHandler)
         httpd.serve_forever()
