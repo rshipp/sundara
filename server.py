@@ -17,6 +17,13 @@ class SundaraServer:
         self.port = port
 
     def run(self):
+        print("Starting Sundara development server...")
         httpd = HTTPServer((self.ip, self.port),
                     SundaraRequestHandler)
-        httpd.serve_forever()
+        try:
+            print("Server listening on http://%s:%s/" % (self.ip,
+                        self.port))
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("Server shutting down...")
+            httpd.shutdown()
