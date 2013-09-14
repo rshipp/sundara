@@ -7,3 +7,7 @@
 """
 
 import subprocess
+
+def run(command):
+    """command shoule be a list"""
+    subprocess.call("git", command)
