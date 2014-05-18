@@ -3,7 +3,10 @@
 
 import argparse
 import socket
+import os
+
 from sundara.server import SundaraServer
+from sundara.sundara import Sundara
 
 def main():
     commands = ['serve', 's', 'generate', 'g']
@@ -42,8 +45,9 @@ def serve(parser, args):
     except socket.gaierror as e:
         parser.exit(1, '%s: %s\n' % (e, args))
 
-def generate(args):
-    pass
+def generate(parser, args):
+    sundara = Sundara(os.getcwd())
+    sundara.generate()
 
 if __name__ == "__main__":
     main()
