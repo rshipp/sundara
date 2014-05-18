@@ -14,7 +14,7 @@ class Sundara():
         self.md_ext = '.md'
         self.md_path = os.path.join(self.dir, self.md_dir)
         self.html_ext = '.html'
-        self.generate_dir = os.path.join(self.dir, 'www')
+        self.generate_path = os.path.join(self.dir, 'www')
 
     def get_files(self):
         repo = pygit2.Repository(self.dir)
@@ -22,15 +22,19 @@ class Sundara():
                 and f.path.startswith(self.md_dir)) ]
 
     def generate(self):
+        # Clean up the generation directory.
+        shutil.rmtree(self.generate_path)
+        os.makedirs(self.generate_path)
+
         jala = Jala()
         for file in self.get_files():
             html = jala.convert(open(os.path.join(self.md_path, file)).read())
 
             # Find the filename for the generated html.
             if file == os.path.join(self.index + self.md_ext):
-                newfilename = os.path.join(self.generate_dir, self.index + self.html_ext)
+                newfilename = os.path.join(self.generate_path, self.index + self.html_ext)
             else:
-                newfilename = os.path.join(self.generate_dir,
+                newfilename = os.path.join(self.generate_path,
                         file[:-len(self.md_ext)], self.index + self.html_ext)
                 dir = os.path.dirname(newfilename)
                 if dir != '' and not os.path.exists(dir):
@@ -43,4 +47,4 @@ class Sundara():
     def init(self):
         pygit2.init_repository(self.dir)
         os.makedirs(self.md_path)
-        os.makedirs(self.generate_dir)
+        os.makedirs(self.generate_path)
