@@ -6,16 +6,26 @@ import pygit2
 
 from sundara.jala import Jala
 from sundara import resources
+from sundara import config
 
 class Sundara():
     def __init__(self, dir):
         self.dir = dir
         self.index = 'index'
-        self.md_dir = 'md/'
-        self.md_ext = '.md'
-        self.md_path = os.path.join(self.dir, self.md_dir)
         self.html_ext = '.html'
-        self.generate_path = os.path.join(self.dir, 'www')
+        self.md_ext = '.md'
+
+        conf_file = os.path.join(self.dir, config.PROJECT_CONF)
+        if os.path.exists(conf_file):
+            self.config = config.Config(conf_file)
+            self.md_dir = self.config.get('sundara', 'md')
+            self.generate_path = os.path.join(self.dir,
+                    self.config.get('sundara', 'generate'))
+        else:
+            self.md_dir = 'md/'
+            self.generate_path = os.path.join(self.dir, 'www/')
+
+        self.md_path = os.path.join(self.dir, self.md_dir)
 
     def get_files(self):
         repo = pygit2.Repository(self.dir)
@@ -49,7 +59,7 @@ class Sundara():
         pygit2.init_repository(self.dir)
         os.makedirs(self.md_path)
         os.makedirs(self.generate_path)
-        with open(os.path.join(self.dir, 'README.md'), "w+") as readme:
-            readme.write(resources.README)
-        with open(os.path.join(self.dir, '.gitignore'), "w+") as gitignore:
-            gitignore.write(resources.GITIGNORE)
+        self.config = config.Config(self.dir)
+        for file in resources.INIT_FILES:
+            with open(os.path.join(self.dir, file), "w+") as f:
+                f.write(resources.INIT_FILES[file])

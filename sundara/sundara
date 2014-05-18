@@ -4,6 +4,7 @@
 import argparse
 import socket
 import os
+from glob import glob
 
 from sundara.server import SundaraServer
 from sundara.sundara import Sundara
@@ -58,6 +59,9 @@ def init(parser, args):
         if not os.path.exists(args):
             os.makedirs(args)
         path = os.path.realpath(args)
+    if os.path.isfile(path) or len(os.listdir(path)) != 0:
+        parser.exit(1, "Cannot initialize project in %s\nDestination path already exists and is not an empty directory.\n" % (
+            path))
     sundara = Sundara(path)
     sundara.init()
 
