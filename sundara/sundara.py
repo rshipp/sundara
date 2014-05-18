@@ -5,6 +5,7 @@ import os
 import pygit2
 
 from sundara.jala import Jala
+from sundara import resources
 
 class Sundara():
     def __init__(self, dir):
@@ -48,3 +49,7 @@ class Sundara():
         pygit2.init_repository(self.dir)
         os.makedirs(self.md_path)
         os.makedirs(self.generate_path)
+        with open(os.path.join(self.dir, 'README.md'), "w+") as readme:
+            readme.write(resources.README)
+        with open(os.path.join(self.dir, '.gitignore'), "w+") as gitignore:
+            gitignore.write(resources.GITIGNORE)
