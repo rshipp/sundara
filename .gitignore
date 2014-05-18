@@ -1,6 +1,4 @@
-*.pyc
-*.pyw
-*.pyo
-__pycache__/
-newfile
-test.py
+*.py[cdow]
+build/
+dist/
+*.egg-info/

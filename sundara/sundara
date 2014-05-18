@@ -2,14 +2,48 @@
 """Sundara jāla: for a beautiful web."""
 
 import argparse
-import sundara, jala
+import socket
+from sundara.server import SundaraServer
 
 def main():
+    commands = ['serve', 's', 'generate', 'g']
+
     parser = argparse.ArgumentParser(
             epilog="report bugs to: \
                 https://github.com/george2/sundara/issues",
     )
+    parser.add_argument('command', metavar='COMMAND', type=str,
+            help=', '.join(commands))
+    parser.add_argument('options', metavar='OPTIONS', type=str,
+            help="command-specific arguments", nargs="?")
     args = parser.parse_args()
+
+    if args.command in commands:
+        if args.command in ['serve', 's']:
+            serve(parser, args.options)
+        elif args.command in ['generate', 'g']:
+            generate(parser, args.options)
+    else:
+        parser.exit(1, "Invalid command: %s\n" % args.command)
+
+def serve(parser, args):
+    if args == None:
+        server = SundaraServer()
+    elif ':' in args:
+        args = args.split(':')
+        try:
+            server = SundaraServer(args[0], int(args[1]))
+        except ValueError as e:
+            parser.exit(1, 'Bad value for port: %s\n' % args[1])
+    else:
+        server = SundaraServer(args)
+    try:
+        server.run()
+    except socket.gaierror as e:
+        parser.exit(1, '%s: %s\n' % (e, args))
+
+def generate(args):
+    pass
 
 if __name__ == "__main__":
     main()
