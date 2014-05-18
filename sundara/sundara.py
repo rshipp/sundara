@@ -9,30 +9,38 @@ from sundara.jala import Jala
 class Sundara():
     def __init__(self, dir):
         self.dir = dir
-        self.md_dir = os.path.join(self.dir, 'md')
+        self.index = 'index'
+        self.md_dir = 'md/'
+        self.md_ext = '.md'
+        self.md_path = os.path.join(self.dir, self.md_dir)
+        self.html_ext = '.html'
         self.generate_dir = os.path.join(self.dir, 'www')
 
     def get_files(self):
         repo = pygit2.Repository(self.dir)
-        return [ f.path[3:] for f in repo.index if (f.path.endswith('.md')
-                and f.path.startswith(self.md_dir + os.path.sep)) ]
+        return [ f.path[len(self.md_dir):] for f in repo.index if (f.path.endswith(self.md_ext)
+                and f.path.startswith(self.md_dir)) ]
 
     def generate(self):
         jala = Jala()
         for file in self.get_files():
-            html = jala.convert(open(file).read())
-            if file == os.path.join(self.md_dir, 'index.md'):
-                newfilename = os.path.join(self.generate_dir, 'index.html')
+            html = jala.convert(open(os.path.join(self.md_path, file)).read())
+
+            # Find the filename for the generated html.
+            if file == os.path.join(self.index + self.md_ext):
+                newfilename = os.path.join(self.generate_dir, self.index + self.html_ext)
             else:
-                newfilename = os.path.join(self.generate_dir, file[3:-3],
-                        'index.html')
+                newfilename = os.path.join(self.generate_dir,
+                        file[:-len(self.md_ext)], self.index + self.html_ext)
                 dir = os.path.dirname(newfilename)
                 if dir != '' and not os.path.exists(dir):
                     os.makedirs(dir)
+
+            # Write the generated file.
             with open(newfilename, "w+") as newfile:
                 newfile.write(html)
 
     def init(self):
         pygit2.init_repository(self.dir)
-        os.makedirs(self.md_dir)
+        os.makedirs(self.md_path)
         os.makedirs(self.generate_dir)
