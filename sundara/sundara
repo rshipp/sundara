@@ -8,6 +8,7 @@ from glob import glob
 
 from sundara.server import SundaraServer
 from sundara.sundara import Sundara
+from sundara import config
 
 def main():
     commands = ['serve', 's', 'generate', 'g', 'init', 'i']
@@ -33,20 +34,26 @@ def main():
         parser.exit(1, "Invalid command: %s\n" % args.command)
 
 def serve(parser, args):
-    if args == None:
-        server = SundaraServer()
-    elif ':' in args:
-        args = args.split(':')
-        try:
-            server = SundaraServer(args[0], int(args[1]))
-        except ValueError as e:
-            parser.exit(1, 'Bad value for port: %s\n' % args[1])
-    else:
-        server = SundaraServer(args)
     try:
-        server.run()
-    except socket.gaierror as e:
-        parser.exit(1, '%s: %s\n' % (e, args))
+        if args == None:
+            if os.path.exists(os.path.join(os.getcwd(), config.PROJECT_CONF)):
+                server = SundaraServer(config=config)
+            else:
+                server = SundaraServer()
+        elif ':' in args:
+            args = args.split(':')
+            try:
+                server = SundaraServer(ip=args[0], port=int(args[1]))
+            except ValueError as e:
+                parser.exit(1, 'Bad value for port: %s\n' % args[1])
+        else:
+            server = SundaraServer(ip=args)
+        try:
+            server.run()
+        except socket.gaierror as e:
+            parser.exit(1, '%s: %s\n' % (e, args))
+    except IOError as e:
+        parser.exit(1, "%s\n" % str(e))
 
 def generate(parser, args):
     sundara = Sundara(os.getcwd())

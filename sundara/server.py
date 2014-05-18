@@ -11,11 +11,18 @@ from urllib.parse import unquote
 
 from sundara import config
 
-
 class SundaraServer():
-    def __init__(self, ip='127.0.0.1', port=8080):
-        self.ip = ip
-        self.port = port
+    def __init__(self, ip='127.0.0.1', port=8080, config=None):
+        if config == None:
+            self.ip = ip
+            self.port = port
+            path = os.path.join(os.getcwd(), 'www')
+        else:
+            self.ip = config.get('server', 'ip')
+            self.port = config.get('server', 'port')
+            path = config.get('sundara', 'generate')
+        if not os.path.exists(path):
+            raise IOError(2, "No such path: %s" % path)
 
     def run(self):
         print("Starting Sundara development server...")
@@ -44,12 +51,18 @@ class SundaraRequestHandler(SimpleHTTPRequestHandler):
         serve files from the Sundara `generate` path instead of the
         cwd.
         """
+        print(self.path)
         path = path.split('?',1)[0]
         path = path.split('#',1)[0]
         path = os.path.normpath(unquote(path))
         words = path.split(os.sep)
         words = filter(None, words)
-        path = config.getGeneratePath()
+
+        if os.path.exists(os.path.join(os.getcwd(), config.PROJECT_CONF)):
+            path = config.Config(os.getcwd()).get('sundara', 'generate')
+        else:
+            path = os.path.join(os.getcwd(), 'www/')
+
         for word in words:
             drive, word = os.path.splitdrive(word)
             head, word = os.path.split(word)
