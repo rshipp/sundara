@@ -1,12 +1,14 @@
 ﻿# Sundara jāla
-## For a beautiful web.
+### For a beautiful web.
 
-### What is it?
+## What is it?
+
 Sundara jāla is (yet another) static website generator. It may not be
 better than any other generator, and it may not do what you want it to.
 It does, however, do exactly what I need.
 
-### So what does it do?
+## So what does it do?
+
 At its most basic level, Sundara is a markdown to HTML5 converter. It
 was designed to allow easy and extremely customizable creation of
 standards-compliant HTML5 websites, beautiful both to the end user and
@@ -20,18 +22,19 @@ The stated goals of this project are as follows:
 * To simplify the process of creating and maintaining a website.
 * To allow any level of customization without sacrificing simplicity.
 
-### What does the name mean?
+## What does the name mean?
+
 Sundara jāla can be translated (more or less literally) from Sanskrit as
 "beautiful web." (But I don't know Sanskrit, and am relying solely on
 online translators, so don't quote me on that.)
 
-### Installation
+## Installation
 
 
 
-### Usage
+## Usage
 
-#### Command syntax
+### Command syntax
 
 Starting development on a new website is easy:
 
@@ -69,7 +72,7 @@ By default, the server binds to 127.0.0.1:8080. Note that the
 server's root is set to the `www\` subdirectory, so you should
 run `sundara generate` first to create/update those files.
 
-#### Creating content
+### Creating content
 
 Sundara uses git to find files you have added to your git repository.
 Any file that ends with `.md` is assumed to be a webpage, and will be
@@ -101,7 +104,7 @@ Sundara supports that too:
 The new page will be placed on your site as 
 [http://yoursite.com/mysubdir/mynewpage]().
 
-#### Changing the look of your site
+### Changing the look of your site
 
 Websites generated with Sundara will use the generic bootstrap CSS
 files by default. If you want to do some bootstrap subclassing,
@@ -111,7 +114,7 @@ you can do that too.
     # TODO
 
 
-### Hacking
+## Hacking
 
 The source is Python 3, and is freely available under a "New BSD" or
 "BSD 3-clause" license. You are encouraged, but not required, to
