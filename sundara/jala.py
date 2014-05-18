@@ -1,4 +1,4 @@
-"""Sundara jāla:fFor a beautiful web.
+"""Sundara jāla: for a beautiful web.
 
 Convert markdown to clean HTML5.
 """
