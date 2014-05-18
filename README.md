@@ -1,4 +1,4 @@
-# Sundara jala
+# Sundara jāla
 
 ### For a beautiful web.
 
@@ -77,7 +77,7 @@ run `sundara generate` first to create/update those files.
 
 Sundara uses git to find files you have added to your git repository.
 Any file that ends with `.md` is assumed to be a webpage, and will be
-added to your site. 
+added to your site.
 
 To start with, you will probably want a homepage; create index.md with
 your content, and add it to the git index:
@@ -102,7 +102,7 @@ Sundara supports that too:
     git add mysubdir/mynewpage.md
     sundara generate
 
-The new page will be placed on your site as 
+The new page will be placed on your site as
 [http://yoursite.com/mysubdir/mynewpage]().
 
 ### Changing the look of your site
@@ -110,7 +110,7 @@ The new page will be placed on your site as
 Websites generated with Sundara will use the generic bootstrap CSS
 files by default. If you want to do some bootstrap subclassing,
 or even remove bootstrap altogether and use your own stylesheets,
-you can do that too. 
+you can do that too.
 
     # TODO
 
