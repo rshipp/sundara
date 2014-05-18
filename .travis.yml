@@ -3,8 +3,9 @@ python:
   - "3.2"
   - "3.3"
 # install dependencies
-install:
-  - "apt-get install libgit2"
-  - "pip install -r requirements.txt --use-mirrors"
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libgit
+install: "pip install -r requirements.txt --use-mirrors"
 # run tests
 script: "echo"
