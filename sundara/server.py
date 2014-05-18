@@ -1,11 +1,8 @@
-#!/usr/bin/env python3
-"""Sundara jāla
-   For a beautiful web.
+"""Sundara jāla: for a beautiful web.
 
-   server.py
-   Implements the functionality for the `sundara runserver` command.
-   A tiny little HTTP server, not suitable for use in production
-   environments.
+Implements the functionality for the `sundara server` command.
+A tiny little HTTP server, not suitable for use in production
+environments.
 """
 
 from http.server import HTTPServer

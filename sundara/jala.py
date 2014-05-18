@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
-"""Sundara jāla
-   For a beautiful web.
+"""Sundara jāla:fFor a beautiful web.
 
-   jala.py
-   Convert markdown to clean HTML5.
+Convert markdown to clean HTML5.
 """
 
 # Global imports
