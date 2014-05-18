@@ -52,7 +52,13 @@ def generate(parser, args):
     sundara.generate()
 
 def init(parser, args):
-    sundara = Sundara(os.getcwd())
+    if args == None:
+        path = os.getcwd()
+    else:
+        if not os.path.exists(args):
+            os.makedirs(args)
+        path = os.path.realpath(args)
+    sundara = Sundara(path)
     sundara.init()
 
 if __name__ == "__main__":
