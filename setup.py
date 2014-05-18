@@ -14,6 +14,7 @@ setup(
     name='sundara',
     version='0.1',
     packages=['sundara'],
+    scripts=['sundara/sundara'],
     include_package_data=True,
     install_requires=requires,
     license='BSD New',
