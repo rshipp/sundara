@@ -9,7 +9,7 @@ from sundara.server import SundaraServer
 from sundara.sundara import Sundara
 
 def main():
-    commands = ['serve', 's', 'generate', 'g']
+    commands = ['serve', 's', 'generate', 'g', 'init', 'i']
 
     parser = argparse.ArgumentParser(
             epilog="report bugs to: \
@@ -26,6 +26,8 @@ def main():
             serve(parser, args.options)
         elif args.command in ['generate', 'g']:
             generate(parser, args.options)
+        elif args.command in ['init', 'i']:
+            init(parser, args.options)
     else:
         parser.exit(1, "Invalid command: %s\n" % args.command)
 
@@ -48,6 +50,10 @@ def serve(parser, args):
 def generate(parser, args):
     sundara = Sundara(os.getcwd())
     sundara.generate()
+
+def init(parser, args):
+    sundara = Sundara(os.getcwd())
+    sundara.init()
 
 if __name__ == "__main__":
     main()

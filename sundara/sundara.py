@@ -2,7 +2,7 @@
 """
 
 import os
-from pygit2 import Repository
+import pygit2
 
 from sundara.jala import Jala
 
@@ -13,7 +13,7 @@ class Sundara():
         self.generate_dir = os.path.join(self.dir, 'www')
 
     def get_files(self):
-        repo = Repository(self.dir)
+        repo = pygit2.Repository(self.dir)
         return [ f.path[3:] for f in repo.index if (f.path.endswith('.md')
                 and f.path.startswith(self.md_dir + os.path.sep)) ]
 
