@@ -1,4 +1,5 @@
-﻿# Sundara jāla
+# Sundara jala
+
 ### For a beautiful web.
 
 ## What is it?
