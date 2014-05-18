@@ -9,17 +9,17 @@ import os
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import unquote
 
-from sundara import config
+from sundara import config as sundara_config
 
 class SundaraServer():
     def __init__(self, ip='127.0.0.1', port=8080, config=None):
         if config == None:
             self.ip = ip
-            self.port = port
+            self.port = int(port)
             path = os.path.join(os.getcwd(), 'www')
         else:
             self.ip = config.get('server', 'ip')
-            self.port = config.get('server', 'port')
+            self.port = int(config.get('server', 'port'))
             path = config.get('sundara', 'generate')
         if not os.path.exists(path):
             raise IOError(2, "No such path: %s" % path)
@@ -58,8 +58,8 @@ class SundaraRequestHandler(SimpleHTTPRequestHandler):
         words = path.split(os.sep)
         words = filter(None, words)
 
-        if os.path.exists(os.path.join(os.getcwd(), config.PROJECT_CONF)):
-            path = config.Config(os.getcwd()).get('sundara', 'generate')
+        if os.path.exists(os.path.join(os.getcwd(), sundara_config.PROJECT_CONF)):
+            path = sundara_config.Config(os.getcwd()).get('sundara', 'generate')
         else:
             path = os.path.join(os.getcwd(), 'www/')
 

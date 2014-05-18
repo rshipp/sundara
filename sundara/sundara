@@ -37,7 +37,7 @@ def serve(parser, args):
     try:
         if args == None:
             if os.path.exists(os.path.join(os.getcwd(), config.PROJECT_CONF)):
-                server = SundaraServer(config=config)
+                server = SundaraServer(config=config.Config(os.getcwd()))
             else:
                 server = SundaraServer()
         elif ':' in args:
