@@ -62,12 +62,12 @@ If you need to change the default site directory to something else (to
 avoid conflicts with a subdirectory in your site, for example), just
 tell Sundara where to put the files explicitly:
 
-    $ sundara generate mywwwwfiles
+    sundara generate mywwwwfiles
 
 Sundara comes with a small built-in development server, so you can test
 your changes instantly:
 
-    $ sundara server [[ip_address:]port]
+    sundara server [[ip_address:]port]
 
 By default, the server binds to 127.0.0.1:8080. Note that the
 server's root is set to the `www\` subdirectory, so you should
@@ -90,8 +90,8 @@ For example, if you create a file called `about.md` that contains
 content for your About page, then add that file to Sundara and
 generate your website:
 
-    $ sundara add about.md
-    $ sundara generate
+    git add about.md
+    sundara generate
 
 You will be able to access the new page (once you put it on your
 server, of course) as [http://yoursite.com/about]().
