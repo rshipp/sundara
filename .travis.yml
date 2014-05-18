@@ -5,9 +5,9 @@ python:
 # install dependencies
 before_install:
   - git clone git://github.com/libgit2/libgit2.git -b master
-  - mkdir build && cd build && cmake ..
-  - cd build && cmake --build .
-  - cd build && sudo cmake --build . --target install
+  - cd libgit2 && mkdir build && cd build && cmake ..
+  - cmake --build .
+  - sudo cmake --build . --target install
 install: "pip install -r requirements.txt --use-mirrors"
 # run tests
 script: "echo"
