@@ -3,7 +3,7 @@ python:
   - "3.2"
   - "3.3"
 # install dependencies
-before_install:
+before_script:
   - git clone git://github.com/libgit2/libgit2.git -b master
   - mkdir build && cd build
   - cmake ..
