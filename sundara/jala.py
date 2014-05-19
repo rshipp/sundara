@@ -19,6 +19,16 @@ class Jala():
         self.config = self.sundara.config
         self.css_path = self.config.get('sundara', 'css')
         self.js_path = self.config.get('sundara', 'js')
+        self.style_css_path = self.config.get('style', 'css')
+        self.style_js_path = self.config.get('style', 'js')
+        if os.path.isabs(self.style_css_path):
+            self.style_css = self.style_css_path[1:]
+        else:
+            self.style_css = self.style_css_path
+        if os.path.isabs(self.style_js_path):
+            self.style_js = self.style_js_path[1:]
+        else:
+            self.style_js = self.style_js_path
 
     def get_stylesheets(self):
         repo = pygit2.Repository(self.sundara.dir)
@@ -155,22 +165,24 @@ class Jala():
         for stylesheet in stylesheets:
             # Link the file.
             soup.head.append(BeautifulSoup().new_tag('link', rel='stylesheet',
-                href=os.path.join(self.config.get('style', 'css'),
-                    stylesheet)))
+                href=os.path.join(self.style_css_path, stylesheet)))
             # Install the file.
+            os.makedirs(os.path.join(self.sundara.generate_path,
+                self.css_path))
             shutil.copy(os.path.join(self.sundara.dir, self.css_path,
                 stylesheet), os.path.join(self.sundara.generate_path,
-                    self.config.get('style', 'css'), stylesheet))
+                    self.style_css, stylesheet))
         scripts = self.get_javascript()
         for script in scripts:
             # Link the file.
             soup.body.append(BeautifulSoup().new_tag('script',
-                src=os.path.join(self.config.get('style', 'js'),
-                    script)))
+                src=os.path.join(self.style_js_path, script)))
             # Install the file.
+            os.makedirs(os.path.join(self.sundara.generate_path,
+                self.js_path))
             shutil.copy(os.path.join(self.sundara.dir, self.js_path,
                 script), os.path.join(self.sundara.generate_path,
-                        self.config.get('style', 'js'), script))
+                        self.style_js, script))
 
         # Prettify and split.
         html = soup.prettify().split('\n')
