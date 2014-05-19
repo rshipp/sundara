@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Sundara jāla: for a beautiful web."""
+
+import argparse
+import socket
+import os
+from glob import glob
+
+from sundara.server import SundaraServer
+from sundara.sundara import Sundara
+from sundara import config as sundara_config
+
+def main():
+    commands = ['serve', 's', 'generate', 'g', 'init', 'i']
+
+    parser = argparse.ArgumentParser(
+            epilog="report bugs to: \
+                https://github.com/george2/sundara/issues",
+    )
+    parser.add_argument('command', metavar='COMMAND', type=str,
+            help=', '.join(commands))
+    parser.add_argument('options', metavar='OPTIONS', type=str,
+            help="command-specific arguments", nargs="?")
+    args = parser.parse_args()
+
+    if args.command in commands:
+        if args.command in ['serve', 's']:
+            serve(parser, args.options)
+        elif args.command in ['generate', 'g']:
+            generate(parser, args.options)
+        elif args.command in ['init', 'i']:
+            init(parser, args.options)
+    else:
+        parser.exit(1, "Invalid command: %s\n" % args.command)
+
+def serve(parser, args):
+    try:
+        if args == None:
+            if os.path.exists(os.path.join(os.getcwd(), sundara_config.PROJECT_CONF)):
+                server = SundaraServer(config=sundara_config.Config(os.getcwd()))
+            else:
+                server = SundaraServer()
+        elif ':' in args:
+            args = args.split(':')
+            try:
+                server = SundaraServer(ip=args[0], port=int(args[1]))
+            except ValueError as e:
+                parser.exit(1, 'Bad value for port: %s\n' % args[1])
+        else:
+            server = SundaraServer(ip=args)
+        try:
+            server.run()
+        except socket.gaierror as e:
+            parser.exit(1, '%s: %s\n' % (e, args))
+    except IOError as e:
+        parser.exit(1, "%s\n" % str(e))
+
+def generate(parser, args):
+    if os.path.exists(os.path.join(os.getcwd(), sundara_config.PROJECT_CONF)):
+        config = sundara_config.Config(os.getcwd())
+        if config.get('meta', 'domain') == '':
+            parser.exit(1, "Nope. Edit your project's .sundararc first.\nSet up the [meta] domain option at the very least.\n")
+    else:
+        parser.exit(1, "This doesn't appear to be a Sundara project directory.\n")
+    sundara = Sundara(os.getcwd())
+    sundara.generate()
+
+def init(parser, args):
+    if args == None:
+        path = os.getcwd()
+    else:
+        if not os.path.exists(args):
+            os.makedirs(args)
+        path = os.path.realpath(args)
+    if os.path.isfile(path) or len(os.listdir(path)) != 0:
+        parser.exit(1, "Cannot initialize project in %s\nDestination path already exists and is not an empty directory.\n" % (
+            path))
+    sundara = Sundara(path)
+    sundara.init()
+
+if __name__ == "__main__":
+    main()

@@ -1,2 +1,4 @@
-*.pyc
-*.pyw
+*.py[cdow]
+build/
+dist/
+*.egg-info/
