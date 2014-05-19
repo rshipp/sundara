@@ -8,6 +8,7 @@ import shutil
 import re
 from markdown import Markdown
 from bs4 import BeautifulSoup
+import pygit2
 
 DOCTYPE="<!DOCTYPE html>\n"
 
@@ -20,33 +21,104 @@ class Jala():
         self.js_path = self.config.get('sundara', 'js')
 
     def get_stylesheets(self):
-        repo = pygit2.Repository(self.dir)
+        repo = pygit2.Repository(self.sundara.dir)
         return [ f.path[len(self.css_path):] for f in repo.index if (
             f.path.endswith('.css') and f.path.startswith(self.css_path)) ]
 
     def get_javascript(self):
-        repo = pygit2.Repository(self.dir)
+        repo = pygit2.Repository(self.sundara.dir)
         return [ f.path[len(self.js_path):] for f in repo.index if (
             f.path.endswith('.js') and f.path.startswith(self.js_path)) ]
 
     def get_header(self):
         header = self.sundara.header + self.sundara.md_ext
-        if header in self.sundara.get_files()
-            return header
+        if header in self.sundara.get_files():
+            with open(os.path.join(self.sundara.md_path, header), "r") as md:
+                return md.read()
+        else:
+            return str()
 
     def get_footer(self):
         footer = self.sundara.footer + self.sundara.md_ext
-        if footer in self.sundara.get_files()
-            return footer
+        if footer in self.sundara.get_files():
+            with open(os.path.join(self.sundara.md_path, footer), "r") as md:
+                return md.read()
+        else:
+            return str()
 
     def get_nav(self):
         nav = self.sundara.nav + self.sundara.md_ext
-        if nav in self.sundara.get_files()
-            return nav
+        if nav in self.sundara.get_files():
+            with open(os.path.join(self.sundara.md_path, nav), "r") as md:
+                return md.read()
+        else:
+            return str()
 
     def convert(self, md, homepage=False):
         markdown = Markdown(output_format="html5")
-        soup = BeautifulSoup(DOCTYPE + markdown.convert(md), "html5lib")
+
+        # Form the HTML document.
+        main = BeautifulSoup().new_tag('div',
+            id=self.config.get('content', 'main'))
+        # Header
+        header = self.get_header()
+        if header != '':
+            htag1 = BeautifulSoup().new_tag('header',
+                    role=self.config.get('content', 'header_role'))
+            htag1['class'] = self.config.get('content', 'header')
+            main.append(htag1)
+            htag2 = BeautifulSoup().new_tag('div')
+            htag2['class'] = self.config.get('content', 'header_content')
+            main.header.append(htag2)
+            bh = BeautifulSoup(markdown.convert(header), "html5lib")
+            bh.html.unwrap()
+            bh.body.unwrap()
+            bh.head.extract()
+            main.header.div.append(bh)
+        # Nav
+        nav = self.get_nav()
+        if nav != '':
+            ntag = BeautifulSoup().new_tag('nav',
+                    role=self.config.get('content', 'nav_role'))
+            ntag['class'] = self.config.get('content', 'nav')
+            main.append(ntag)
+            bn = BeautifulSoup(markdown.convert(nav), "html5lib")
+            bn.html.unwrap()
+            bn.body.unwrap()
+            bn.head.extract()
+            main.nav.append(bn)
+        # Content
+        bc = BeautifulSoup(markdown.convert(md), "html5lib")
+        bc.html.unwrap()
+        ctag1 = BeautifulSoup().new_tag('div')
+        ctag1['class'] = self.config.get('content', 'container')
+        bc.body.wrap(ctag1)
+        ctag2 = BeautifulSoup().new_tag('div')
+        ctag2['class'] = self.config.get('content', 'row')
+        bc.body.wrap(ctag2)
+        ctag3 = BeautifulSoup().new_tag('div')
+        ctag3['class'] = self.config.get('content', 'content')
+        bc.body.wrap(ctag3)
+        bc.body.unwrap()
+        bc.head.extract()
+        main.append(bc)
+        # Footer
+        footer = self.get_footer()
+        if footer != '':
+            ftag1 = BeautifulSoup().new_tag('footer')
+            ftag1['class'] = self.config.get('content', 'footer')
+            main.append(ftag1)
+            ftag2 = BeautifulSoup().new_tag('div')
+            ftag2['class'] = self.config.get('content', 'footer_content')
+            main.footer.append(ftag2)
+            bf = BeautifulSoup(markdown.convert(footer), "html5lib")
+            bf.html.unwrap()
+            bf.body.unwrap()
+            main.footer.div.append(bf)
+            bf.head.extract()
+        # Throw it all in the soup!
+        soup = BeautifulSoup(DOCTYPE, "html5lib")
+        soup.body.append(main)
 
         # Add meta information.
         soup.html['lang'] = self.config.get('meta', 'lang')
@@ -63,8 +135,10 @@ class Jala():
                             soup.h1.string)
         # If description exists, add it to the homepage ONLY.
         if homepage and self.config.get('meta', 'description') != '':
-                soup.head.append(BeautifulSoup().new_tag('meta',
-                    name='description', content=self.config.get('meta', 'description')))
+                desc = BeautifulSoup().new_tag('meta',
+                        content=self.config.get('meta', 'description'))
+                desc['name'] = 'description'
+                soup.head.append(desc)
 
         # Link in Bootstrap and jQuery.
         if self.config.get('style', 'bootstrap') == 'on':
@@ -81,7 +155,8 @@ class Jala():
         for stylesheet in stylesheets:
             # Link the file.
             soup.head.append(BeautifulSoup().new_tag('link', rel='stylesheet',
-                href=os.path.join(self.config.get('style', 'css'), stylesheet))
+                href=os.path.join(self.config.get('style', 'css'),
+                    stylesheet)))
             # Install the file.
             shutil.copy(os.path.join(self.sundara.dir, self.css_path,
                 stylesheet), os.path.join(self.sundara.generate_path,
@@ -90,7 +165,8 @@ class Jala():
         for script in scripts:
             # Link the file.
             soup.body.append(BeautifulSoup().new_tag('script',
-                src=os.path.join(self.config.get('style', 'js'), script))
+                src=os.path.join(self.config.get('style', 'js'),
+                    script)))
             # Install the file.
             shutil.copy(os.path.join(self.sundara.dir, self.js_path,
                 script), os.path.join(self.sundara.generate_path,
@@ -105,4 +181,4 @@ class Jala():
                 # if line isn't a tag and previous line is indented and not a tag
                 html[index] = re.match("\s*", html[index - 1]).group() + line
 
-        return '\n'.join(html)
+        return BeautifulSoup('\n'.join(html)).prettify()

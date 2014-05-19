@@ -2,6 +2,7 @@
 """
 
 import os
+import shutil
 import pygit2
 
 from sundara.jala import Jala
@@ -15,13 +16,13 @@ class Sundara():
         self.header = 'header'
         self.footer = 'footer'
         self.nav = 'nav'
+        self.md_ext = '.md'
+        self.html_ext = '.html'
         self.skip = [
                 self.header + self.md_ext,
                 self.footer + self.md_ext,
                 self.nav + self.md_ext,
         ]
-        self.html_ext = '.html'
-        self.md_ext = '.md'
 
         conf_file = os.path.join(self.dir, config.PROJECT_CONF)
         if os.path.exists(conf_file):

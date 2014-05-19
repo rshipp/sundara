@@ -49,13 +49,17 @@ CONFIG = """# Sundara configuration file.
 [content]
     # Div ids and classes; check the HTML for a better idea of how these
     # work.
+    main = main
     header = navbar navbar-fixed navbar-top navbar-inverse
     header_role = navigation
     header_content = container-fluid col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
-    main = main
+    nav = 
+    nav_role = navigation
     container = container-fluid
     row = row
     content = col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
+    footer = footer
+    footer_content = container-fluid col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
 [sundara]
     # Directories: use a trailing slash!
     md = md/
