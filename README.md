@@ -68,20 +68,24 @@ You should never need to edit these files (if you do, all your
 changes will be overwritten the next time you run `sundara generate`).
 Just copy them directly on to your web server, and you're ready to go.
 
-If you need to change the default site directory to something else (to
-avoid conflicts with a subdirectory in your site, for example), just
-tell Sundara where to put the files explicitly:
-
-    sundara generate mywwwwfiles
+If you need to change the default site directory to something else for
+some reason, just change the `generate` option in the `[sundara]`
+section of your project's `.sundararc`.
 
 Sundara comes with a small built-in development server, so you can test
 your changes instantly:
 
-    sundara server [[ip_address:]port]
+    sundara serve [[ip_address:]port]
 
-By default, the server binds to 127.0.0.1:8080. Note that the
-server's root is set to the `www\` subdirectory, so you should
+By default, the server binds to 127.0.0.1:8080. Note that the server's
+root is set to the configured `generate` subdirectory, so you should
 run `sundara generate` first to create/update those files.
+
+All Sundara commands also have Rails-esque short options:
+
+    init     -> i
+    generate -> g
+    serve    -> s
 
 ### Creating content
 
@@ -115,15 +119,24 @@ Sundara supports that too:
 The new page will be placed on your site as
 [http://yoursite.com/mysubdir/mynewpage]().
 
+### Header, footer, and nav
+
+Sundara supports compiling multiple HTML and/or Markdown files into one
+at generation time. By default, `header.html`, `footer.html`, and
+`nav.md` are all included (if they exist) into every page when the site
+is generated. Check your project's `.sundararc` for more configuration
+options.
+
 ### Changing the look of your site
 
 Websites generated with Sundara will use the generic bootstrap CSS
 files by default. If you want to do some bootstrap subclassing,
 or even remove bootstrap altogether and use your own stylesheets,
-you can do that too.
+you can do that too. Check your project's `.sundararc` for more
+information.
 
-    # TODO
-
+All stylesheets in `css/` and all JavaScript files in `js/` are also
+automatically linked into every page by default.
 
 ## Hacking
 
