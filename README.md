@@ -121,11 +121,9 @@ The new page will be placed on your site as
 
 ### Header, footer, and nav
 
-Sundara supports compiling multiple HTML and/or Markdown files into one
-at generation time. By default, `header.html`, `footer.html`, and
-`nav.md` are all included (if they exist) into every page when the site
-is generated. Check your project's `.sundararc` for more configuration
-options.
+Sundara supports compiling multiple Markdown files into one at generation
+time. By default, `header.md`, `footer.md`, and `nav.md` are all included
+(if they exist) into every page when the site is generated.
 
 ### Changing the look of your site
 
