@@ -8,7 +8,7 @@ from glob import glob
 
 from sundara.server import SundaraServer
 from sundara.sundara import Sundara
-from sundara import config
+from sundara import config as sundara_config
 
 def main():
     commands = ['serve', 's', 'generate', 'g', 'init', 'i']
@@ -36,8 +36,8 @@ def main():
 def serve(parser, args):
     try:
         if args == None:
-            if os.path.exists(os.path.join(os.getcwd(), config.PROJECT_CONF)):
-                server = SundaraServer(config=config.Config(os.getcwd()))
+            if os.path.exists(os.path.join(os.getcwd(), sundara_config.PROJECT_CONF)):
+                server = SundaraServer(config=sundara_config.Config(os.getcwd()))
             else:
                 server = SundaraServer()
         elif ':' in args:
@@ -56,6 +56,12 @@ def serve(parser, args):
         parser.exit(1, "%s\n" % str(e))
 
 def generate(parser, args):
+    if os.path.exists(os.path.join(os.getcwd(), sundara_config.PROJECT_CONF)):
+        config = sundara_config.Config(os.getcwd())
+        if config.get('meta', 'domain') == 'CHANGEME':
+            parser.exit(1, "Nope. Edit your project's .sundararc first.\nSet up the [meta] domain option at the very least.\n")
+    else:
+        parser.exit(1, "This doesn't appear to be a Sundara project directory.\n")
     sundara = Sundara(os.getcwd())
     sundara.generate()
 
