@@ -58,7 +58,7 @@ def serve(parser, args):
 def generate(parser, args):
     if os.path.exists(os.path.join(os.getcwd(), sundara_config.PROJECT_CONF)):
         config = sundara_config.Config(os.getcwd())
-        if config.get('meta', 'domain') == 'CHANGEME':
+        if config.get('meta', 'domain') == '':
             parser.exit(1, "Nope. Edit your project's .sundararc first.\nSet up the [meta] domain option at the very least.\n")
     else:
         parser.exit(1, "This doesn't appear to be a Sundara project directory.\n")

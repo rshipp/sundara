@@ -29,7 +29,7 @@ CONFIG = """# Sundara configuration file.
     # Site name (used for homepage <title>) and domain.
     name = 
     # Domain name (used for robots.txt and sitemap generation).
-    domain = CHANGEME
+    domain = 
     # Available variables: {name}, {h1}
     title = {h1}
     description = 
