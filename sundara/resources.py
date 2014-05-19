@@ -30,22 +30,32 @@ CONFIG = """# Sundara configuration file.
     name = 
     # Domain name (used for robots.txt and sitemap generation).
     domain = CHANGEME
-    # Available variables: {name}, {file}, {h1}
+    # Available variables: {name}, {h1}
     title = {h1}
     description = 
-    keywords = {name}, {h1}, 
     # Change these if you use a different language or encoding.
-    lang = en_US
+    lang = en-US
     encoding = utf-8
 [style]
-    # Bootstrap/jQuery: cdn, local, off
-    bootstrap = cdn
-    jquery = cdn
+    # Bootstrap/jQuery (uses CDN): on, off
+    bootstrap = on
+    jquery = on
+    # Where generated stylesheet/js documents will go inside the
+    # generate folder. This is how HTML documents will refer to them as
+    # well, so make sure to include a preceding slah if these will be in
+    # the root of your site.
+    css = /css/
+    js = /js/
 [content]
-    # Header/footer/nav: html, md
-    header = html
-    footer = html
-    nav = md
+    # Div ids and classes; check the HTML for a better idea of how these
+    # work.
+    header = navbar navbar-fixed navbar-top navbar-inverse
+    header_role = navigation
+    header_content = container-fluid col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
+    main = main
+    container = container-fluid
+    row = row
+    content = col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
 [sundara]
     # Directories: use a trailing slash!
     md = md/
