@@ -33,9 +33,9 @@ online translators, so don't quote me on that.)
 
 First, make sure you have the `libgit2` headers installed. If you're on
 Ubuntu <=12, this means you probably want to compile it from source.
-Check the `before_install` script in `.travis.yml` if you need help with
-that. On Ubuntu >12, you'll want `libgit2-dev`; on other distros, look
-for a `libgit2-dev` or `libgit2` package.
+Check the `before_install` script in [.travis.yml](.travis.yml) if you
+need help with that. On Ubuntu >12, you'll want `libgit2-dev`; on other
+distros, look for a `libgit2-dev` or `libgit2` package.
 
 Once libgit2 is installed, you should be good to go. Just run:
 
