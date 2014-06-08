@@ -22,10 +22,12 @@ under the hood.
 The stated goals of this project are as follows:
 
 * To output perfectly formed HTML5 web pages.
-* To integrate with Bootstrap and jQuery to provide end-user eye candy.
+* To integrate by default with Bootstrap and jQuery to provide end-user eye candy.
 * To maintain seperation of code, style and content.
 * To simplify the process of creating and maintaining a website.
 * To allow any level of customization without sacrificing simplicity.
+* To encourage the use of version control (git) on site files.
+* To remove crud (like `.html`) from generated URLs.
 
 ## What does the name mean?
 
@@ -45,6 +47,7 @@ Once libgit2 is installed, you should be good to go. Just run:
 
     git clone https://github.com/george2/sundara.git
     cd sundara
+    sudo pip install -r requirements.txt
     sudo python setup.py install
 
 ## Usage
@@ -68,9 +71,8 @@ a shiny new website, run:
     sundara generate
 
 The site files will be placed in the `www\` subdirectory by default.
-You should never need to edit these files (if you do, all your
-changes will be overwritten the next time you run `sundara generate`).
-Just copy them directly on to your web server, and you're ready to go.
+You should never need to edit these files; just copy them directly on to
+your web server, and you're good to go.
 
 If you need to change the default site directory to something else for
 some reason, just change the `generate` option in the `[sundara]`
@@ -83,7 +85,7 @@ your changes instantly:
 
 By default, the server binds to 127.0.0.1:8080. Note that the server's
 root is set to the configured `generate` subdirectory, so you should
-run `sundara generate` first to create/update those files.
+run `sundara generate` first to create and/or update those files.
 
 All Sundara commands also have Rails-esque short options:
 
@@ -132,8 +134,8 @@ time. By default, `header.md`, `footer.md`, and `nav.md` are all included
 ### Changing the look of your site
 
 Websites generated with Sundara will use the generic bootstrap CSS
-files by default. If you want to do some bootstrap subclassing,
-or even remove bootstrap altogether and use your own stylesheets,
+files by default. If you want to do some Bootstrap subclassing,
+or even remove Bootstrap altogether and use your own stylesheets,
 you can do that too. Check your project's `.sundararc` for more
 information.
 
