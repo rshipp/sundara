@@ -1,6 +1,4 @@
-# Sundara jāla
-
-### For a beautiful web.
+# Sundara jāla: for a beautiful web.
 
 [![Build Status](https://travis-ci.org/george2/sundara.svg)][travis]
 [![Coverage Status](https://img.shields.io/coveralls/george2/sundara.svg)][coveralls]
