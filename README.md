@@ -3,8 +3,8 @@
 [![Build Status](https://travis-ci.org/george2/sundara.svg)][travis]
 [![Coverage Status](https://img.shields.io/coveralls/george2/sundara.svg)][coveralls]
 
-[travis]: (https://travis-ci.org/george2/sundara)
-[coveralls]: (https://coveralls.io/r/george2/sundara)
+[travis]: https://travis-ci.org/george2/sundara
+[coveralls]: https://coveralls.io/r/george2/sundara
 
 ## What is it?
 
