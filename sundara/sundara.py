@@ -68,9 +68,14 @@ class Sundara():
 
     def init(self):
         pygit2.init_repository(self.dir)
-        os.makedirs(self.md_path)
-        os.makedirs(self.generate_path)
+        for dir in [ self.md_path, self.generate_path ]:
+            try:
+                os.makedirs(dir)
+            except FileExistsError:
+                # Dir exists, so we don't need to create it.
+                pass
         self.config = config.Config(self.dir)
         for file in resources.INIT_FILES:
-            with open(os.path.join(self.dir, file), "w+") as f:
-                f.write(resources.INIT_FILES[file])
+            if not os.path.exists(os.path.join(self.dir, file)):
+                with open(os.path.join(self.dir, file), "w+") as f:
+                    f.write(resources.INIT_FILES[file])
