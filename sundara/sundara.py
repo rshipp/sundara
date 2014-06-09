@@ -71,7 +71,7 @@ class Sundara():
         for dir in [ self.md_path, self.generate_path ]:
             try:
                 os.makedirs(dir)
-            except FileExistsError:
+            except OSError:
                 # Dir exists, so we don't need to create it.
                 pass
         self.config = config.Config(self.dir)
