@@ -48,9 +48,8 @@ class Sundara():
         # TODO: This entire block will be removed in refactoring.
         try:
             shutil.rmtree(self.generate_path)
+            os.makedirs(self.generate_path)
         except OSError:
-            pass
-        else:
             os.makedirs(self.generate_path)
 
         jala = Jala(self)
