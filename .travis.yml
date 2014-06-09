@@ -2,6 +2,7 @@ language: python
 python:
   - 3.2
   - 3.3
+  - 3.4
 before_install:
   - git clone git://github.com/libgit2/libgit2.git -b master
   - cd libgit2 && mkdir build && cd build
@@ -12,8 +13,10 @@ before_install:
 install:
   - export LIBGIT2="/usr/local"
   - export LDFLAGS="-Wl,-rpath='$LIBGIT2/lib',--enable-new-dtags $LDFLAGS"
+  - export CFLAGS="-Wno-error=declaration-after-statement"
   - pip install pygit2
   - unset LDFLAGS
+  - unset CFLAGS
   - pip install -r tests/requirements.txt --use-mirrors
   - pip install coveralls
   - python setup.py install
