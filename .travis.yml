@@ -7,9 +7,9 @@ before_install:
   - cd libgit2 && mkdir build && cd build
   - cmake ..
   - cmake --build .
-  - sudo cmake --build . --target install
+  - sudo cmake --build . --target install -DCMAKE_INSTALL_PATH=/usr
   - cd ../..
-install: 
+install:
   - pip install -r tests/requirements.txt --use-mirrors
   - pip install coveralls
   - python setup.py install
