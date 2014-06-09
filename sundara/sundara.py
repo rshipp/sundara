@@ -22,6 +22,7 @@ class Sundara():
                 self.header + self.md_ext,
                 self.footer + self.md_ext,
                 self.nav + self.md_ext,
+                self.md_ext,  # Ignore files named '.md'.
         ]
 
         conf_file = os.path.join(self.dir, config.PROJECT_CONF)
@@ -43,8 +44,14 @@ class Sundara():
 
     def generate(self):
         # Clean up the generation directory.
-        shutil.rmtree(self.generate_path)
-        os.makedirs(self.generate_path)
+        
+        # TODO: This entire block will be removed in refactoring.
+        try:
+            shutil.rmtree(self.generate_path)
+        except OSError:
+            pass
+        else:
+            os.makedirs(self.generate_path)
 
         jala = Jala(self)
         for file in self.get_files():

@@ -140,9 +140,13 @@ class Jala():
         if homepage:
             soup.title.string = site_name
         else:
+            if soup.h1:
+                h1_title = soup.h1.string
+            else:
+                h1_title = ''
             soup.title.string = self.config.get('meta',
                     'title').replace('{name}', site_name).replace('{h1}',
-                            soup.h1.string)
+                            h1_title)
         # If description exists, add it to the homepage ONLY.
         if homepage and self.config.get('meta', 'description') != '':
                 desc = BeautifulSoup().new_tag('meta',
