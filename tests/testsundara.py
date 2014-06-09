@@ -84,7 +84,7 @@ class TestSundara(unittest.TestCase):
             try:
                 os.makedirs(os.path.join(self.dir,
                     os.path.dirname(file)))
-            except FileExistsError:
+            except OSError:
                 pass
             with open(os.path.join(self.dir, file), "w+") as f:
                 f.write('\n')
@@ -129,7 +129,7 @@ class TestSundara(unittest.TestCase):
             try:
                 os.makedirs(os.path.join(self.dir,
                     os.path.dirname(file)))
-            except FileExistsError:
+            except OSError:
                 pass
             with open(os.path.join(self.dir, file), "w+") as f:
                 f.write('\n')
