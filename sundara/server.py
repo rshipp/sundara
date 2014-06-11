@@ -6,7 +6,7 @@ environments.
 """
 
 import os
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+import http.server
 from urllib.parse import unquote
 
 from sundara import config as sundara_config
@@ -26,7 +26,7 @@ class SundaraServer():
 
     def run(self):
         print("Starting Sundara development server...")
-        httpd = HTTPServer((self.ip, self.port),
+        httpd = http.server.HTTPServer((self.ip, self.port),
                     SundaraRequestHandler)
         try:
             print("Server listening on http://%s:%s/" % (self.ip,
@@ -37,7 +37,7 @@ class SundaraServer():
             httpd.shutdown()
 
 
-class SundaraRequestHandler(SimpleHTTPRequestHandler):
+class SundaraRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Implements the functionality for Sundara's built-in development
     server. A tiny little HTTP server, not suitable for use in production
     environments.

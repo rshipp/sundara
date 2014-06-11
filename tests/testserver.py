@@ -1,11 +1,15 @@
 import unittest
+try:
+    from mock import Mock
+except:
+    from unittest.mock import Mock
 
 import os
 import shutil
 import tempfile
 import uuid
 from configparser import ConfigParser
-from http.server import HTTPServer
+import http.server
 
 from sundara import server
 from sundara import config
@@ -56,10 +60,17 @@ class TestServer(unittest.TestCase):
 
     def test_run_serves(self):
         os.makedirs(os.path.join(self.dir, 'www/'))
-        #server.SundaraServer().run()
+        http.server = Mock()
+        try:
+            server.SundaraServer().run()
+        except Exception:
+            self.fail()
 
     def test_run_excepts(self):
-        pass
+        # TODO: have httpd.serve_forever throw KeyboardInterrupt.
+        self.assertFalse(os.path.exists(os.path.join(self.dir, 'www/')))
+        http.server = Mock()
+        #self.assertEquals(KeyboardInterrupt, server.SundaraServer().run)
 
 
 class TestHandler(unittest.TestCase):
