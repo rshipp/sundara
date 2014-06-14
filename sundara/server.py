@@ -44,12 +44,6 @@ class SundaraRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     This is an http.server Request Handler.
     """
-    def __init__(request, client_address, server):
-        # Unit test secret handshake entry point.
-        if server != None:
-            super().__init__(request, client_address, server)
-        else:
-            pass
 
     def translate_path(self, path):
         """This function overrides that in http.server.SimpleHTTPRequestHandler

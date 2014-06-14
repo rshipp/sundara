@@ -95,6 +95,10 @@ class TestHandler(unittest.TestCase):
         # Make sure user config can't interfere with the tests.
         config.USER_CONF = ''
         # Set up the handler.
+        class MockBase:
+            def __init__(*args, **kwargs):
+                return None
+        server.SundaraRequestHandler.__bases__ = (MockBase, )
         self.handler = server.SundaraRequestHandler(None, None)
         # Mock getcwd.
         self.old_getcwd = os.getcwd
