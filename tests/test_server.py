@@ -69,15 +69,18 @@ class TestServer(unittest.TestCase):
     def test_run_excepts(self):
         os.makedirs(os.path.join(self.dir, 'www/'))
         # Have httpd.serve_forever throw KeyboardInterrupt.
-        http.server = Mock()
-        with patch('http.server.HTTPServer.serve_forever',
-                new=Mock(side_effect=KeyboardInterrupt())):
-            with patch('http.server.HTTPServer.shutdown',
-                    new=Mock(side_effect=Exception('testserver'))):
-                try:
-                    server.SundaraServer().run()
-                except Exception as e:
-                    self.assertEquals(str(e), 'testserver')
+        with patch.object(http.server.HTTPServer, 'serve_forever',
+                          new=Mock(side_effect=KeyboardInterrupt())), \
+             patch.object(http.server.HTTPServer, 'shutdown',
+                          new=Mock(side_effect=Exception('testserver'))), \
+             patch.object(http.server.HTTPServer, '__init__',
+                        new=lambda x,y,z : None):
+            try:
+                server.SundaraServer().run()
+            except Exception as e:
+                self.assertEquals(str(e), 'testserver')
+            else:
+                self.fail()
 
 
 
