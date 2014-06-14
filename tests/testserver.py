@@ -1,8 +1,8 @@
 import unittest
 try:
-    from mock import Mock
+    from mock import Mock, patch
 except:
-    from unittest.mock import Mock
+    from unittest.mock import Mock, patch
 
 import os
 import shutil
@@ -60,17 +60,25 @@ class TestServer(unittest.TestCase):
 
     def test_run_serves(self):
         os.makedirs(os.path.join(self.dir, 'www/'))
-        http.server = Mock()
-        try:
-            server.SundaraServer().run()
-        except Exception:
-            self.fail()
+        with patch('http.server', new=Mock()):
+            try:
+                server.SundaraServer().run()
+            except Exception:
+                self.fail()
 
     def test_run_excepts(self):
-        # TODO: have httpd.serve_forever throw KeyboardInterrupt.
-        self.assertFalse(os.path.exists(os.path.join(self.dir, 'www/')))
+        os.makedirs(os.path.join(self.dir, 'www/'))
+        # Have httpd.serve_forever throw KeyboardInterrupt.
         http.server = Mock()
-        #self.assertEquals(KeyboardInterrupt, server.SundaraServer().run)
+        with patch('http.server.HTTPServer.serve_forever',
+                new=Mock(side_effect=KeyboardInterrupt())):
+            with patch('http.server.HTTPServer.shutdown',
+                    new=Mock(side_effect=Exception('testserver'))):
+                try:
+                    server.SundaraServer().run()
+                except Exception as e:
+                    self.assertEquals(str(e), 'testserver')
+
 
 
 class TestHandler(unittest.TestCase):
