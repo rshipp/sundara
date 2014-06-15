@@ -61,8 +61,8 @@ def generate(parser, args):
             parser.exit(1, "Nope. Edit your project's .sundararc first.\nSet up the [meta] domain option at the very least.\n")
     else:
         parser.exit(1, "This doesn't appear to be a Sundara project directory.\n")
-    sundara = Project(os.getcwd())
-    sundara.generate()
+    project = Project(os.getcwd())
+    project.generate()
 
 def init(parser, args):
     if args == None:
@@ -74,8 +74,8 @@ def init(parser, args):
     if os.path.isfile(path) or len(os.listdir(path)) != 0:
         parser.exit(1, "Cannot initialize project in %s\nDestination path already exists and is not an empty directory.\n" % (
             path))
-    sundara = Project(path)
-    sundara.init()
+    project = Project(path)
+    project.init()
 
 if __name__ == "__main__":
     main()

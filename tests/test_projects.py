@@ -100,7 +100,7 @@ class TestProject(unittest.TestCase):
             self.assertTrue(file in index)
         # Create a Project instance and make sure get_files ONLY returns
         # the correctly named Markdown files.
-        got_files = projects.Project(self.dir).get_files()
+        got_files = projects.Project(self.dir).get_markdown()
         for file in got_files:
             self.assertTrue(os.path.join('md/', file) in md_files)
             self.assertFalse(file in bad_files)
@@ -149,7 +149,7 @@ class TestProject(unittest.TestCase):
             self.assertFalse(file in index)
         # Create a Project instance and make sure get_files ONLY returns
         # the added_files.
-        got_files = projects.Project(self.dir).get_files()
+        got_files = projects.Project(self.dir).get_markdown()
         for file in got_files:
             self.assertTrue(os.path.join('md/', file) in added_files)
             self.assertFalse(os.path.join('md/', file) in bad_files)

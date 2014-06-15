@@ -7,6 +7,7 @@ import pygit2
 from sundara.jala import Jala
 from sundara import resources
 from sundara import config
+from sundara import exceptions
 from sundara.tools import config2kwargs
 
 class Project():
@@ -41,6 +42,9 @@ class Project():
 
         self.md_path = os.path.join(self.project_dir, self.md_dir)
 
+    # get_{files} methods
+    # For obtaining lists of filenames.
+
     def get_stylesheets(self):
         repo = pygit2.Repository(self.project_dir)
         return [ f.path[len(self.css_path):] for f in repo.index if (
@@ -51,9 +55,17 @@ class Project():
         return [ f.path[len(self.js_path):] for f in repo.index if (
             f.path.endswith('.js') and f.path.startswith(self.js_path)) ]
 
+    def get_markdown(self):
+        repo = pygit2.Repository(self.project_dir)
+        return [ f.path[len(self.md_dir):] for f in repo.index if (f.path.endswith(self.md_ext)
+                and f.path.startswith(self.md_dir)) ]
+
+    # get_{file} methods
+    # For obtaining the contents of a specific file.
+
     def get_header(self):
         header = self.header + self.md_ext
-        if header in self.get_files():
+        if header in self.get_markdown():
             with open(os.path.join(self.md_path, header), "r") as md:
                 return md.read()
         else:
@@ -61,7 +73,7 @@ class Project():
 
     def get_footer(self):
         footer = self.footer + self.md_ext
-        if footer in self.get_files():
+        if footer in self.get_markdown():
             with open(os.path.join(self.md_path, footer), "r") as md:
                 return md.read()
         else:
@@ -69,16 +81,13 @@ class Project():
 
     def get_nav(self):
         nav = self.nav + self.md_ext
-        if nav in self.get_files():
+        if nav in self.get_markdown():
             with open(os.path.join(self.md_path, nav), "r") as md:
                 return md.read()
         else:
             return str()
 
-    def get_files(self):
-        repo = pygit2.Repository(self.project_dir)
-        return [ f.path[len(self.md_dir):] for f in repo.index if (f.path.endswith(self.md_ext)
-                and f.path.startswith(self.md_dir)) ]
+    # Methods for the main project commands.
 
     def generate(self):
         # Clean up the generation directory.
@@ -98,7 +107,7 @@ class Project():
             'footer': self.get_footer(),
         })
         jala = Jala(**jala_args)
-        for filename in self.get_files():
+        for filename in self.get_markdown():
             if filename not in self.skip:
                 # Find the filename for the generated HTML, and convert.
                 if filename == os.path.join(self.index + self.md_ext):

@@ -1,6 +1,8 @@
 import os
 from setuptools import setup
 
+from sundara import __version__
+
 README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
 # allow setup.py to be run from any path
@@ -12,7 +14,7 @@ requires = requirements.strip().split('\n')
 
 setup(
     name='sundara',
-    version='0.1',
+    version=__version__,
     packages=['sundara'],
     scripts=['sundara/sundara'],
     include_package_data=True,
