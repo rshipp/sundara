@@ -12,7 +12,7 @@ from sundara import config as sundara_config
 
 class SundaraServer():
     def __init__(self, ip='127.0.0.1', port=8080, config=None):
-        if config == None:
+        if config is None:
             self.ip = ip
             self.port = int(port)
             path = os.path.join(os.getcwd(), 'www')
@@ -26,10 +26,9 @@ class SundaraServer():
     def run(self):
         print("Starting Sundara development server...")
         httpd = http.server.HTTPServer((self.ip, self.port),
-                    SundaraRequestHandler)
+                                        SundaraRequestHandler)
         try:
-            print("Server listening on http://%s:%s/" % (self.ip,
-                        self.port))
+            print("Server listening on http://%s:%s/" % (self.ip, self.port))
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("Server shutting down...")
@@ -60,8 +59,8 @@ class SundaraRequestHandler(http.server.SimpleHTTPRequestHandler):
             path = os.path.join(os.getcwd(), 'www/')
 
         for word in words:
-            drive, word = os.path.splitdrive(word)
-            head, word = os.path.split(word)
+            _, word = os.path.splitdrive(word)
+            _, word = os.path.split(word)
             if word in (os.curdir, os.pardir): continue
             path = os.path.join(path, word)
         return path
