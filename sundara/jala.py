@@ -1,11 +1,9 @@
 import os
-import sys
 import shutil
 import re
 
 from markdown import Markdown
 from bs4 import BeautifulSoup
-import pygit2
 
 DOCTYPE="<!DOCTYPE html>\n"
 
