@@ -19,10 +19,10 @@ class Project():
         self.md_ext = '.md'
         self.html_ext = '.html'
         self.skip = [
-                self.header + self.md_ext,
-                self.footer + self.md_ext,
-                self.nav + self.md_ext,
-                self.md_ext,  # Ignore files named '.md'.
+            self.header + self.md_ext,
+            self.footer + self.md_ext,
+            self.nav + self.md_ext,
+            self.md_ext,  # Ignore files named '.md'.
         ]
 
         conf_file = os.path.join(self.project_dir, config.PROJECT_CONF)
@@ -109,9 +109,9 @@ class Project():
                     html = jala.convert(open(os.path.join(self.md_path, filename)).read())
                     newfilename = os.path.join(self.generate_path,
                             filename[:-len(self.md_ext)], self.index + self.html_ext)
-                    dir = os.path.dirname(newfilename)
-                    if dir != '' and not os.path.exists(dir):
-                        os.makedirs(dir)
+                    path = os.path.dirname(newfilename)
+                    if path != '' and not os.path.exists(path):
+                        os.makedirs(path)
 
                 # Write the generated file.
                 with open(newfilename, "w+") as newfile:
@@ -119,14 +119,14 @@ class Project():
 
     def init(self):
         pygit2.init_repository(self.project_dir)
-        for dir in [ self.md_path, self.generate_path ]:
+        for path in [ self.md_path, self.generate_path ]:
             try:
-                os.makedirs(dir)
+                os.makedirs(path)
             except OSError:
-                # Dir exists, so we don't need to create it.
+                # Path exists, so we don't need to create it.
                 pass
         self.config = config.Config(self.project_dir)
-        for file in resources.INIT_FILES:
-            if not os.path.exists(os.path.join(self.project_dir, file)):
-                with open(os.path.join(self.project_dir, file), "w+") as f:
-                    f.write(resources.INIT_FILES[file])
+        for init_file in resources.INIT_FILES:
+            if not os.path.exists(os.path.join(self.project_dir, init_file)):
+                with open(os.path.join(self.project_dir, init_file), "w+") as f:
+                    f.write(resources.INIT_FILES[init_file])
