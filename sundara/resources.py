@@ -100,6 +100,6 @@ Sitemap: http://%s/sitemap.xml
 """
 
 INIT_FILES = {
-        'README.md': README,
-        '.gitignore': GITIGNORE,
+    'README.md': README,
+    '.gitignore': GITIGNORE,
 }
