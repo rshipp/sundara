@@ -10,8 +10,8 @@ USER_CONF = os.path.expanduser('~/.sundararc')
 PROJECT_CONF = '.sundararc'
 
 class Config():
-    def __init__(self, dir):
-        project_conf = os.path.join(dir, PROJECT_CONF)
+    def __init__(self, project_dir):
+        project_conf = os.path.join(project_dir, PROJECT_CONF)
 
         # Make sure a project config exists; if not, create it.
         if not os.path.exists(project_conf):
