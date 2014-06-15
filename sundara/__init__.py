@@ -1,2 +1,2 @@
-__version__ = "0.1.0"
-__all__ = [ "config", "jala", "resources", "server", "sundara" ]
+__version__ = "0.2.0"
+__all__ = [ "config", "jala", "projects", "resources", "server", ]

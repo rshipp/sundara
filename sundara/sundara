@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Sundara jāla: for a beautiful web."""
 
 import argparse
 import socket
@@ -7,7 +6,7 @@ import os
 from glob import glob
 
 from sundara.server import SundaraServer
-from sundara.sundara import Sundara
+from sundara.projects import Project
 from sundara import config as sundara_config
 
 def main():
@@ -62,7 +61,7 @@ def generate(parser, args):
             parser.exit(1, "Nope. Edit your project's .sundararc first.\nSet up the [meta] domain option at the very least.\n")
     else:
         parser.exit(1, "This doesn't appear to be a Sundara project directory.\n")
-    sundara = Sundara(os.getcwd())
+    sundara = Project(os.getcwd())
     sundara.generate()
 
 def init(parser, args):
@@ -75,7 +74,7 @@ def init(parser, args):
     if os.path.isfile(path) or len(os.listdir(path)) != 0:
         parser.exit(1, "Cannot initialize project in %s\nDestination path already exists and is not an empty directory.\n" % (
             path))
-    sundara = Sundara(path)
+    sundara = Project(path)
     sundara.init()
 
 if __name__ == "__main__":

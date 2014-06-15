@@ -8,11 +8,11 @@ from configparser import ConfigParser
 
 import pygit2
 
-from sundara import sundara
+from sundara import projects
 from sundara import config
 from sundara import resources
 
-class TestSundara(unittest.TestCase):
+class TestProject(unittest.TestCase):
 
     def setUp(self):
         self.dir = tempfile.mktemp()
@@ -40,18 +40,18 @@ class TestSundara(unittest.TestCase):
         conf.set('sundara', 'generate', unique_generate)
         with open(self.config_file, "w+") as f:
             conf.write(f)
-        # Create a Sundara instance and check that it used the values in
+        # Create a Project instance and check that it used the values in
         # the config file.
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         self.assertEquals(unique_md, s.md_dir)
         self.assertEquals(os.path.join(self.dir, unique_generate), s.generate_path)
 
     def test_uses_sane_defaults_if_no_config(self):
         # Make sure no config file exists.
         self.assertFalse(os.path.exists(self.config_file))
-        # Create a Sundara instance and check that the values are set to
+        # Create a Project instance and check that the values are set to
         # sane defaults.
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         self.assertEquals('md/', s.md_dir)
         self.assertEquals(os.path.join(self.dir, 'www/'), s.generate_path)
 
@@ -98,9 +98,9 @@ class TestSundara(unittest.TestCase):
         for file in all_files:
             self.assertTrue(os.path.isfile(os.path.join(self.dir, file)))
             self.assertTrue(file in index)
-        # Create a Sundara instance and make sure get_files ONLY returns
+        # Create a Project instance and make sure get_files ONLY returns
         # the correctly named Markdown files.
-        got_files = sundara.Sundara(self.dir).get_files()
+        got_files = projects.Project(self.dir).get_files()
         for file in got_files:
             self.assertTrue(os.path.join('md/', file) in md_files)
             self.assertFalse(file in bad_files)
@@ -147,9 +147,9 @@ class TestSundara(unittest.TestCase):
         for file in bad_files:
             self.assertTrue(os.path.isfile(os.path.join(self.dir, file)))
             self.assertFalse(file in index)
-        # Create a Sundara instance and make sure get_files ONLY returns
+        # Create a Project instance and make sure get_files ONLY returns
         # the added_files.
-        got_files = sundara.Sundara(self.dir).get_files()
+        got_files = projects.Project(self.dir).get_files()
         for file in got_files:
             self.assertTrue(os.path.join('md/', file) in added_files)
             self.assertFalse(os.path.join('md/', file) in bad_files)
@@ -167,7 +167,7 @@ class TestSundara(unittest.TestCase):
     def test_generate_creates_dir_if_not_exists(self):
         # Don't create a directory.
         generate_dir = os.path.join(self.dir, 'www/')
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         s.init()  # FIXME! See above generate test.
         shutil.rmtree(generate_dir)
         self.assertFalse(os.path.exists(generate_dir))
@@ -183,7 +183,7 @@ class TestSundara(unittest.TestCase):
         generate_dir = os.path.join(self.dir, 'www/')
         os.makedirs(generate_dir)
         # Call generate, make sure it doesn't die.
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         try:
             s.init()  # FIXME! See above generate test.
             s.generate()
@@ -192,7 +192,7 @@ class TestSundara(unittest.TestCase):
         self.assertTrue(os.path.isdir(generate_dir))
 
     def test_generate_skips_skipped_files(self):
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         s.init()
         index = pygit2.Repository(self.dir).index
         html_files = []
@@ -213,7 +213,7 @@ class TestSundara(unittest.TestCase):
             self.assertFalse(os.path.exists(file))
 
     def test_generate_generates_index_html(self):
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         s.init()
         index = pygit2.Repository(self.dir).index
         with open(os.path.join(self.dir, 'md/index.md'), "w+") as f:
@@ -227,7 +227,7 @@ class TestSundara(unittest.TestCase):
             'www/index.html')))
 
     def test_generate_generates_custom_html(self):
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         s.init()
         md_files = [
                 'md/.md.md',
@@ -249,7 +249,7 @@ class TestSundara(unittest.TestCase):
                 'www/subdir/test/index.html',
                 'www/subdir.md/test/index.html',
         ]
-        s = sundara.Sundara(self.dir)
+        s = projects.Project(self.dir)
         s.init()
         index = pygit2.Repository(self.dir).index
         for file in md_files:
@@ -282,7 +282,7 @@ class TestSundara(unittest.TestCase):
         project_dir = os.path.join(self.dir, 'TEST')
         self.assertFalse(os.path.exists(project_dir))
         # Make sure init creates it.
-        sundara.Sundara(project_dir).init()
+        projects.Project(project_dir).init()
         self.assertTrue(os.path.isdir(project_dir))
         self.assertTrue(os.path.isdir(os.path.join(project_dir,
             '.git')))
@@ -293,7 +293,7 @@ class TestSundara(unittest.TestCase):
         self.assertTrue(os.path.isdir(os.path.join(self.dir, '.git')))
         # Make sure init still runs.
         try:
-            sundara.Sundara(self.dir).init()
+            projects.Project(self.dir).init()
         except Exception:
             self.fail()
 
@@ -302,7 +302,7 @@ class TestSundara(unittest.TestCase):
         project_dir = os.path.join(self.dir, 'TEST')
         self.assertFalse(os.path.exists(project_dir))
         # Make sure init creates the folders.
-        sundara.Sundara(project_dir).init()
+        projects.Project(project_dir).init()
         self.assertTrue(os.path.isdir(project_dir))
         self.assertTrue(os.path.isdir(os.path.join(project_dir,
             'md')))
@@ -315,7 +315,7 @@ class TestSundara(unittest.TestCase):
         os.makedirs(os.path.join(self.dir, 'www/'))
         # Make sure init still runs.
         try:
-            sundara.Sundara(self.dir).init()
+            projects.Project(self.dir).init()
         except Exception:
             self.fail()
 
@@ -324,7 +324,7 @@ class TestSundara(unittest.TestCase):
         project_dir = os.path.join(self.dir, 'TEST')
         self.assertFalse(os.path.exists(project_dir))
         # Make sure init creates the folders.
-        sundara.Sundara(project_dir).init()
+        projects.Project(project_dir).init()
         self.assertTrue(os.path.isdir(project_dir))
         for file in resources.INIT_FILES:
             self.assertTrue(os.path.isfile(os.path.join(project_dir,
@@ -339,7 +339,7 @@ class TestSundara(unittest.TestCase):
                 f.write(unique_string)
         # Call init, and make sure it doesn't overwrite.
         try:
-            sundara.Sundara(self.dir)
+            projects.Project(self.dir)
         except Exception:
             self.fail()
         for file in resources.INIT_FILES:

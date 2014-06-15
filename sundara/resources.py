@@ -1,6 +1,4 @@
-"""Sundara jāla: for a beautiful web.
-File resources used by Sundara.
-"""
+"""File resources used by Sundara."""
 
 README = """# Welcome to Sundara!
 

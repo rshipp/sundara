@@ -1,5 +1,4 @@
-"""Sundara jāla: for a beautiful web.
-"""
+"""Project management."""
 
 import os
 import shutil
@@ -8,8 +7,9 @@ import pygit2
 from sundara.jala import Jala
 from sundara import resources
 from sundara import config
+from sundara.tools import config2kwargs
 
-class Sundara():
+class Project():
     def __init__(self, dir):
         self.dir = dir
         self.index = 'index'
@@ -37,6 +37,40 @@ class Sundara():
 
         self.md_path = os.path.join(self.dir, self.md_dir)
 
+    def get_stylesheets(self):
+        repo = pygit2.Repository(self.dir)
+        return [ f.path[len(self.css_path):] for f in repo.index if (
+            f.path.endswith('.css') and f.path.startswith(self.css_path)) ]
+
+    def get_javascript(self):
+        repo = pygit2.Repository(self.dir)
+        return [ f.path[len(self.js_path):] for f in repo.index if (
+            f.path.endswith('.js') and f.path.startswith(self.js_path)) ]
+
+    def get_header(self):
+        header = self.header + self.md_ext
+        if header in self.get_files():
+            with open(os.path.join(self.md_path, header), "r") as md:
+                return md.read()
+        else:
+            return str()
+
+    def get_footer(self):
+        footer = self.footer + self.md_ext
+        if footer in self.get_files():
+            with open(os.path.join(self.md_path, footer), "r") as md:
+                return md.read()
+        else:
+            return str()
+
+    def get_nav(self):
+        nav = self.nav + self.md_ext
+        if nav in self.get_files():
+            with open(os.path.join(self.md_path, nav), "r") as md:
+                return md.read()
+        else:
+            return str()
+
     def get_files(self):
         repo = pygit2.Repository(self.dir)
         return [ f.path[len(self.md_dir):] for f in repo.index if (f.path.endswith(self.md_ext)
@@ -52,7 +86,14 @@ class Sundara():
         except OSError:
             os.makedirs(self.generate_path)
 
-        jala = Jala(self)
+        jala_args = config2kwargs(self.config.config)
+        jala_args.update({
+            'dir': self.dir,
+            'header': self.get_header(),
+            'nav': self.get_nav(),
+            'footer': self.get_footer(),
+        })
+        jala = Jala(**jala_args)
         for file in self.get_files():
             if file not in self.skip:
                 # Find the filename for the generated HTML, and convert.

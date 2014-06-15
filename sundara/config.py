@@ -1,6 +1,4 @@
-"""Sundara jāla: for a beautiful web.
-Read in configuration options from a project's Sundara config.
-"""
+"""Read in configuration options from a project's Sundara config."""
 
 import os
 import shutil

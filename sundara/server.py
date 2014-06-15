@@ -1,6 +1,5 @@
-"""Sundara jāla: for a beautiful web.
+"""Implements the functionality for the built-in development server.
 
-Implements the functionality for the built-in development server.
 A tiny little HTTP file server, not suitable for use in production
 environments.
 """
