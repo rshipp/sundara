@@ -31,9 +31,13 @@ class Project():
             self.md_dir = self.config.get('sundara', 'md')
             self.generate_path = os.path.join(self.dir,
                     self.config.get('sundara', 'generate'))
+            self.css_path = self.config.get('sundara', 'css')
+            self.js_path = self.config.get('sundara', 'js')
         else:
             self.md_dir = 'md/'
             self.generate_path = os.path.join(self.dir, 'www/')
+            self.css_path = 'css/'
+            self.js_path = 'js/'
 
         self.md_path = os.path.join(self.dir, self.md_dir)
 
