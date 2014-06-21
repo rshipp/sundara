@@ -20,7 +20,7 @@
 [coveralls-dev]: https://coveralls.io/r/george2/sundara?branch=development
 [landscape-dev]: https://landscape.io/github/george2/sundara/development
 
-## What is it?
+### What is it?
 
 At its most basic level, Sundara is a markdown to HTML5 converter. It
 was designed to allow easy and extremely customizable creation of
@@ -37,7 +37,7 @@ The stated goals of this project are as follows:
 * To encourage the use of version control (git) on site files.
 * To remove crud (like `.html`) from generated URLs.
 
-## What does the name mean?
+### What does the name mean?
 
 Sundara jāla can be translated (more or less literally) from Sanskrit as
 "beautiful web." (But I don't know Sanskrit, and am relying solely on
