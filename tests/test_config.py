@@ -7,6 +7,7 @@ import uuid
 
 from sundara import config
 from sundara import resources
+from sundara import exceptions
 
 class TestConfig(unittest.TestCase):
 
@@ -73,3 +74,8 @@ class TestConfig(unittest.TestCase):
         c = config.Config(self.dir)
         self.assertEquals(unique_value, c.get(unique_section,
             unique_option))
+
+    def test_raises_ConfigError_on_exception(self):
+        c = config.Config(self.dir)
+        self.assertRaises(exceptions.ConfigError, c.get, 'badsection', 'option')
+        self.assertRaises(exceptions.ConfigError, c.get, 'sundara', 'badoption')
