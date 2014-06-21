@@ -45,47 +45,39 @@ class Project():
     # get_{files} methods
     # For obtaining lists of filenames.
 
-    def get_stylesheets(self):
+    def _get_files(self, folder, extension):
         repo = pygit2.Repository(self.project_dir)
-        return [ f.path[len(self.css_path):] for f in repo.index if (
-            f.path.endswith('.css') and f.path.startswith(self.css_path)) ]
+        return [ f.path[len(folder):] for f in repo.index if (
+            f.path.endswith(extension) and f.path.startswith(folder)) ]
+
+    def get_stylesheets(self):
+        return self._get_files(self.css_path, '.css')
 
     def get_javascript(self):
-        repo = pygit2.Repository(self.project_dir)
-        return [ f.path[len(self.js_path):] for f in repo.index if (
-            f.path.endswith('.js') and f.path.startswith(self.js_path)) ]
+        return self._get_files(self.js_path, '.js')
 
     def get_markdown(self):
-        repo = pygit2.Repository(self.project_dir)
-        return [ f.path[len(self.md_dir):] for f in repo.index if (f.path.endswith(self.md_ext)
-                and f.path.startswith(self.md_dir)) ]
+        return self._get_files(self.md_dir, self.md_ext)
 
     # get_{file} methods
     # For obtaining the contents of a specific file.
 
-    def get_header(self):
-        header = self.header + self.md_ext
-        if header in self.get_markdown():
-            with open(os.path.join(self.md_path, header), "r") as md:
+    def _get_file(self, filename):
+        name = filename + self.md_ext
+        if name in self.get_markdown():
+            with open(os.path.join(self.md_path, name), "r") as md:
                 return md.read()
         else:
             return str()
+
+    def get_header(self):
+        return self._get_file(self.header)
 
     def get_footer(self):
-        footer = self.footer + self.md_ext
-        if footer in self.get_markdown():
-            with open(os.path.join(self.md_path, footer), "r") as md:
-                return md.read()
-        else:
-            return str()
+        return self._get_file(self.footer)
 
     def get_nav(self):
-        nav = self.nav + self.md_ext
-        if nav in self.get_markdown():
-            with open(os.path.join(self.md_path, nav), "r") as md:
-                return md.read()
-        else:
-            return str()
+        return self._get_file(self.nav)
 
     # Methods for the main project commands.
 
@@ -98,6 +90,7 @@ class Project():
             os.makedirs(self.generate_path)
         except OSError:
             os.makedirs(self.generate_path)
+        # ^^^
 
         jala_args = config2kwargs(self.config.config)
         jala_args.update({
