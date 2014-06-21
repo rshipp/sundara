@@ -13,15 +13,6 @@ class Jala():
         self.style_css_path = self.config.get('style.css', '/css/')
         self.style_js_path = self.config.get('style.js', '/js/')
 
-        if os.path.isabs(self.style_css_path):
-            self.style_css = self.style_css_path[1:]
-        else:
-            self.style_css = self.style_css_path
-        if os.path.isabs(self.style_js_path):
-            self.style_js = self.style_js_path[1:]
-        else:
-            self.style_js = self.style_js_path
-
         # Cache some values in memory for faster conversion.
         self.cache = {
             'header': None,
