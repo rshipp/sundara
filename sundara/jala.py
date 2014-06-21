@@ -1,5 +1,4 @@
 import os
-import shutil
 import re
 
 from markdown import Markdown
@@ -83,7 +82,6 @@ class Jala():
 
     def _convert_file(self, content, name):
         """Convert markdown to a bs4 object, and save it to the cache."""
-        config_section = ''.join(['content.', name, '.'])
         tag = self._new_tag(name)
         div = self._new_tag('div', name)
         tag.append(div)
@@ -96,7 +94,7 @@ class Jala():
         """Convert the header to a bs4 object, and save it to the cache."""
         self._convert_file(header, 'header')
 
-    def convert_nav(self):
+    def convert_nav(self, nav):
         """Convert the nav to a bs4 object, and save it to the cache."""
         ntag = self._new_tag('nav')
         bn = bs4.BeautifulSoup(self.markdown.convert(nav), "html5lib")
