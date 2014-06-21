@@ -7,7 +7,6 @@ import pygit2
 from sundara.jala import Jala
 from sundara import resources
 from sundara import config
-from sundara import exceptions
 from sundara.tools import config2kwargs
 
 class Project():
@@ -119,12 +118,12 @@ class Project():
                     newfile.write(html)
         for filename in self.get_javascript():
             os.makedirs(os.path.join(self.generate_path, self.js_path))
-            shutil.copy(os.path.join(self.dir, self.js_path, script),
-                        os.path.join(self.generate_path, self.style_js, script))
+            shutil.copy(os.path.join(self.project_dir, self.js_path, filename),
+                        os.path.join(self.generate_path, self.js_path, filename))
         for filename in self.get_stylesheets():
             os.makedirs(os.path.join(self.generate_path, self.css_path))
-            shutil.copy(os.path.join(self.dir, self.css_path, stylesheet),
-                        os.path.join(self.generate_path, self.style_css, stylesheet))
+            shutil.copy(os.path.join(self.project_dir, self.css_path, filename),
+                        os.path.join(self.generate_path, self.css_path, filename))
 
     def init(self):
         pygit2.init_repository(self.project_dir)
