@@ -80,3 +80,13 @@ class TestJala(unittest.TestCase):
         self.assertIn('<script', html)
         self.assertIn('src="{file}"'.format(file=files[0]), html)
         self.assertIn('src="{file}"'.format(file=files[1]), html)
+
+    def test_convert_footer_uses_config_values(self):
+        self.j.config['content.footer.class'] = 'footer'
+        self.j.convert_footer('content')
+        self.assertIn('<footer class="footer">', str(self.j.cache['footer']))
+
+    def test_convert_uses_config_values(self):
+        self.j.config['content.container.div.class'] = 'test'
+        html = self.j.convert('content')
+        self.assertIn('<div class="test">', html)

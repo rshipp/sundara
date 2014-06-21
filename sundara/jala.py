@@ -57,9 +57,10 @@ class Jala():
         return self.prettify()
 
     def _new_tag(self, name, parent=None):
-        config_section = ''.join(['content.', parent or '', name, '.'])
+        parent = parent + '.' if parent else ''
+        config_section = ''.join(['content.', parent, name, '.'])
         matching_config = (
-            option.lstrip(config_section)
+            (option[len(config_section):], self.config.get(option))
             for option in self.config
             if option.startswith(config_section)
         )
