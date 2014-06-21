@@ -3,7 +3,6 @@
 import argparse
 import socket
 import os
-from glob import glob
 
 from sundara.server import SundaraServer
 from sundara.projects import Project
