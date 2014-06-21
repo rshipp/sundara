@@ -12,22 +12,30 @@ class TestJala(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def produces_correct_html(self, j, name, should_have_div=True):
+        html = str(j.cache[name]).strip()
+        self.assertTrue(html.startswith('<'+name+''))
+        self.assertIn('This is an h1.', html)
+        if should_have_div:
+            self.assertIn('<div', html)
+            self.assertIn('</div>', html)
+        else:
+            self.assertNotIn('<div', html)
+            self.assertNotIn('</div>', html)
+        self.assertTrue(html.endswith('</'+name+'>'))
+
+
     def test_convert_header_produces_correct_html(self):
         j = jala.Jala()
         j.convert_header(self.valid_md)
-        html = str(j.cache['header']).strip()
-        self.assertTrue(html.startswith('<header'))
-        self.assertIn('<div', html)
-        self.assertIn('This is an h1.', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.endswith('</header>'))
+        self.produces_correct_html(j, 'header')
 
     def test_convert_footer_produces_correct_html(self):
         j = jala.Jala()
         j.convert_footer(self.valid_md)
-        html = str(j.cache['footer']).strip()
-        self.assertTrue(html.startswith('<footer'))
-        self.assertIn('<div', html)
-        self.assertIn('This is an h1.', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.endswith('</footer>'))
+        self.produces_correct_html(j, 'footer')
+
+    def test_convert_nav_produces_correct_html(self):
+        j = jala.Jala()
+        j.convert_nav(self.valid_md)
+        self.produces_correct_html(j, 'nav', should_have_div=False)

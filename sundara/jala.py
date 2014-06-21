@@ -80,29 +80,27 @@ class Jala():
             }
         )
 
-    def _convert_file(self, content, name):
+    def _convert_file(self, name, content, add_div=True):
         """Convert markdown to a bs4 object, and save it to the cache."""
         tag = self._new_tag(name)
-        div = self._new_tag('div', name)
-        tag.append(div)
         html = bs4.BeautifulSoup(self.markdown.convert(content), "html5lib")
-        for child in html.body.children:
-            div.append(child)
+        if add_div:
+            div = self._new_tag('div', name)
+            tag.append(div)
+            for child in html.body.children:
+                div.append(child)
+        else:
+            for child in html.body.children:
+                tag.append(child)
         self.cache[name] = tag
 
     def convert_header(self, header):
         """Convert the header to a bs4 object, and save it to the cache."""
-        self._convert_file(header, 'header')
+        self._convert_file('header', header)
 
     def convert_nav(self, nav):
         """Convert the nav to a bs4 object, and save it to the cache."""
-        ntag = self._new_tag('nav')
-        bn = bs4.BeautifulSoup(self.markdown.convert(nav), "html5lib")
-        bn.html.unwrap()
-        bn.body.unwrap()
-        bn.head.extract()
-        ntag.append(bn)
-        self.cache['nav'] = ntag
+        self._convert_file('nav', nav, add_div=False)
 
     def convert_content(self, md):
         """Convert the content to a bs4 object, and return it."""
@@ -120,7 +118,7 @@ class Jala():
 
     def convert_footer(self, footer):
         """Convert the footer to a bs4 object, and save it to the cache."""
-        self._convert_file(footer, 'footer')
+        self._convert_file('footer', footer)
 
     def add_meta(self, homepage=False):
         # Add meta information.
