@@ -56,10 +56,10 @@ class TestProject(unittest.TestCase):
         self.assertEquals(os.path.join(self.dir, 'www/'), s.generate_path)
 
     #
-    # Tests for get_files
+    # Tests for get_markdown
     #
 
-    def test_get_files_gets_only_md(self):
+    def test_get_markdown_gets_only_md(self):
         # Create git repo with md and other files.
         pygit2.init_repository(self.dir)
         index = pygit2.Repository(self.dir).index
@@ -98,7 +98,7 @@ class TestProject(unittest.TestCase):
         for file in all_files:
             self.assertTrue(os.path.isfile(os.path.join(self.dir, file)))
             self.assertTrue(file in index)
-        # Create a Project instance and make sure get_files ONLY returns
+        # Create a Project instance and make sure get_markdown ONLY returns
         # the correctly named Markdown files.
         got_files = projects.Project(self.dir).get_markdown()
         for file in got_files:
@@ -108,7 +108,7 @@ class TestProject(unittest.TestCase):
         for file in md_files:
             self.assertTrue(file[len('md/'):] in got_files)
 
-    def test_get_files_gets_only_git(self):
+    def test_get_markdown_gets_only_git(self):
         # Create git repo with md files, but only add some of them to
         # the index.
         pygit2.init_repository(self.dir)
@@ -147,7 +147,7 @@ class TestProject(unittest.TestCase):
         for file in bad_files:
             self.assertTrue(os.path.isfile(os.path.join(self.dir, file)))
             self.assertFalse(file in index)
-        # Create a Project instance and make sure get_files ONLY returns
+        # Create a Project instance and make sure get_markdown ONLY returns
         # the added_files.
         got_files = projects.Project(self.dir).get_markdown()
         for file in got_files:
@@ -230,45 +230,94 @@ class TestProject(unittest.TestCase):
         s = projects.Project(self.dir)
         s.init()
         md_files = [
-                'md/.md.md',
-                'md/.test.md',
-                'md/test.md',
-                'md/test.name.md',
-                'md/Test_%*().md',
-                'md/tEst.not test.md',
-                'md/subdir/test.md',
-                'md/subdir.md/test.md',
+            'md/.md.md',
+            'md/.test.md',
+            'md/test.md',
+            'md/test.name.md',
+            'md/Test_%*().md',
+            'md/tEst.not test.md',
+            'md/subdir/test.md',
+            'md/subdir.md/test.md',
         ]
         html_files = [
-                'www/.md/index.html',
-                'www/.test/index.html',
-                'www/test/index.html',
-                'www/test.name/index.html',
-                'www/Test_%*()/index.html',
-                'www/tEst.not test/index.html',
-                'www/subdir/test/index.html',
-                'www/subdir.md/test/index.html',
+            'www/.md/index.html',
+            'www/.test/index.html',
+            'www/test/index.html',
+            'www/test.name/index.html',
+            'www/Test_%*()/index.html',
+            'www/tEst.not test/index.html',
+            'www/subdir/test/index.html',
+            'www/subdir.md/test/index.html',
         ]
-        s = projects.Project(self.dir)
-        s.init()
         index = pygit2.Repository(self.dir).index
-        for file in md_files:
+        for md in md_files:
             try:
                 os.makedirs(os.path.join(self.dir,
-                    os.path.dirname(file)))
+                    os.path.dirname(md)))
             except OSError:
                 pass
-            with open(os.path.join(self.dir, file), "w+") as f:
+            with open(os.path.join(self.dir, md), "w+") as f:
                 f.write('\n')
         index.add_all(md_files)
         index.write()
-        for file in html_files:
-            self.assertFalse(os.path.exists(os.path.join(self.dir,
-                file)))
+        for html in html_files:
+            self.assertFalse(os.path.exists(os.path.join(self.dir, html)))
         s.generate()
-        for file in html_files:
-            self.assertTrue(os.path.exists(os.path.join(self.dir,
-                file)))
+        for html in html_files:
+            self.assertTrue(os.path.exists(os.path.join(self.dir, html)))
+            
+    def test_generate_installs_scripts(self):
+        s = projects.Project(self.dir)
+        s.init()
+        index = pygit2.Repository(self.dir).index
+        files = [
+            'js/test.js',
+            'js/anothertest.js',
+        ]
+        for filename in files:
+            try:
+                os.makedirs(os.path.join(self.dir,
+                    os.path.dirname(filename)))
+            except OSError:
+                pass
+            with open(os.path.join(self.dir, filename), "w+") as f:
+                f.write('\n')
+        index.add_all(files)
+        index.write()
+        for filename in files:
+            self.assertFalse(os.path.exists(os.path.join(self.dir,
+                'www', filename)))
+        s.generate()
+        for filename in files:
+            self.assertTrue(os.path.exists(os.path.join(self.dir, 'www',
+                filename)))
+
+
+    def test_generate_installs_stylesheets(self):
+        s = projects.Project(self.dir)
+        s.init()
+        index = pygit2.Repository(self.dir).index
+        files = [
+            'css/test.css',
+            'css/anothertest.css',
+        ]
+        for filename in files:
+            try:
+                os.makedirs(os.path.join(self.dir,
+                    os.path.dirname(filename)))
+            except OSError:
+                pass
+            with open(os.path.join(self.dir, filename), "w+") as f:
+                f.write('\n')
+        index.add_all(files)
+        index.write()
+        for filename in files:
+            self.assertFalse(os.path.exists(os.path.join(self.dir,
+                'www', filename)))
+        s.generate()
+        for filename in files:
+            self.assertTrue(os.path.exists(os.path.join(self.dir, 'www',
+                filename)))
 
     #
     # Tests for init
@@ -345,4 +394,3 @@ class TestProject(unittest.TestCase):
         for file in resources.INIT_FILES:
             with open(os.path.join(self.dir, file), "r+") as f:
                 self.assertEquals(unique_string, f.read())
-

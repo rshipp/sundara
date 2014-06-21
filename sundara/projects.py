@@ -116,12 +116,12 @@ class Project():
                 # Write the generated file.
                 with open(newfilename, "w+") as newfile:
                     newfile.write(html)
+        os.makedirs(os.path.join(self.generate_path, self.js_path))
         for filename in self.get_javascript():
-            os.makedirs(os.path.join(self.generate_path, self.js_path))
             shutil.copy(os.path.join(self.project_dir, self.js_path, filename),
                         os.path.join(self.generate_path, self.js_path, filename))
+        os.makedirs(os.path.join(self.generate_path, self.css_path))
         for filename in self.get_stylesheets():
-            os.makedirs(os.path.join(self.generate_path, self.css_path))
             shutil.copy(os.path.join(self.project_dir, self.css_path, filename),
                         os.path.join(self.generate_path, self.css_path, filename))
 
