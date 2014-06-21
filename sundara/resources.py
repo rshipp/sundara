@@ -52,9 +52,9 @@ CONFIG = """# Sundara configuration file.
     header.div.class = container-fluid col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
     nav.class = 
     nav.role = navigation
-    div.container.class = container-fluid
-    div.row.class = row
-    div.content.class = col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
+    container.div.class = container-fluid
+    row.div.class = row
+    content.div.class = col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
     footer.class = footer
     footer.div.content = container-fluid col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2
 [sundara]
