@@ -22,12 +22,6 @@
 
 ## What is it?
 
-Sundara jāla is (yet another) static website generator. It may not be
-better than any other generator, and it may not do what you want it to.
-It does, however, do exactly what I need.
-
-## So what does it do?
-
 At its most basic level, Sundara is a markdown to HTML5 converter. It
 was designed to allow easy and extremely customizable creation of
 standards-compliant HTML5 websites, beautiful both to the end user and
@@ -103,9 +97,9 @@ run `sundara generate` first to create and/or update those files.
 
 All Sundara commands also have Rails-esque short options:
 
-    init     -> i
-    generate -> g
-    serve    -> s
+    i -> init
+    g -> generate
+    s -> serve
 
 ### Creating content
 
