@@ -122,15 +122,7 @@ class Jala():
 
     def convert_footer(self, footer):
         """Convert the footer to a bs4 object, and save it to the cache."""
-        ftag1 = self._new_tag('footer')
-        ftag2 = self._new_tag('div', 'footer')
-        ftag1.append(ftag2)
-        bf = bs4.BeautifulSoup(self.markdown.convert(footer), "html5lib")
-        bf.html.unwrap()
-        bf.body.unwrap()
-        bf.head.extract()
-        ftag2.append(bf)
-        self.cache['footer'] = ftag1
+        self._convert_file(footer, 'footer')
 
     def add_meta(self, homepage=False):
         # Add meta information.
