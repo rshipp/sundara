@@ -118,6 +118,14 @@ class Project():
                 # Write the generated file.
                 with open(newfilename, "w+") as newfile:
                     newfile.write(html)
+        for filename in self.get_javascript():
+            os.makedirs(os.path.join(self.generate_path, self.js_path))
+            shutil.copy(os.path.join(self.dir, self.js_path, script),
+                        os.path.join(self.generate_path, self.style_js, script))
+        for filename in self.get_stylesheets():
+            os.makedirs(os.path.join(self.generate_path, self.css_path))
+            shutil.copy(os.path.join(self.dir, self.css_path, stylesheet),
+                        os.path.join(self.generate_path, self.style_css, stylesheet))
 
     def init(self):
         pygit2.init_repository(self.project_dir)

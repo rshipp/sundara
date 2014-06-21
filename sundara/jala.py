@@ -14,13 +14,6 @@ class Jala():
         self.style_css_path = self.config.get('style.css', '/css/')
         self.style_js_path = self.config.get('style.js', '/js/')
 
-        # These need to be refactored out.
-        self.css_path = self.config.get('sundara.css', 'css/')
-        self.js_path = self.config.get('sundara.js', 'js/')
-        self.generate_path = self.config.get('sundara.generate')
-        self.dir = self.config.get('dir')
-        # ^^^^
-
         if os.path.isabs(self.style_css_path):
             self.style_css = self.style_css_path[1:]
         else:
@@ -174,29 +167,11 @@ class Jala():
             self.soup.head.append(BeautifulSoup().new_tag('link', rel='stylesheet',
                 href=os.path.join(self.style_css_path, stylesheet)))
 
-            # This needs to be refactored out.
-            # Install the file.
-            os.makedirs(os.path.join(self.generate_path,
-                self.css_path))
-            shutil.copy(os.path.join(self.dir, self.css_path,
-                stylesheet), os.path.join(self.generate_path,
-                    self.style_css, stylesheet))
-            # ^^^^
-
         scripts = self.config.get('javascript', [])
         for script in scripts:
             # Link the file.
             self.soup.body.append(BeautifulSoup().new_tag('script',
                 src=os.path.join(self.style_js_path, script)))
-
-            # This needs to be refactored out.
-            # Install the file.
-            os.makedirs(os.path.join(self.generate_path,
-                self.js_path))
-            shutil.copy(os.path.join(self.dir, self.js_path,
-                script), os.path.join(self.generate_path,
-                        self.style_js, script))
-            # ^^^^
 
     def prettify(self):
         # Prettify and split.
