@@ -3,7 +3,7 @@ import shutil
 import re
 
 from markdown import Markdown
-from bs4 import BeautifulSoup
+import bs4
 
 DOCTYPE="<!DOCTYPE html>\n"
 
@@ -38,11 +38,10 @@ class Jala():
         self.markdown = Markdown(output_format="html5")
 
     def convert(self, md, homepage=False):
-        self.soup = BeautifulSoup(DOCTYPE, "html5lib")
+        self.soup = bs4.BeautifulSoup(DOCTYPE, "html5lib")
 
         # Form the HTML document.
-        main = BeautifulSoup().new_tag('div',
-            id=self.config.get('content.main', 'main'))
+        main = bs4.BeautifulSoup().new_tag('div', id='main')
         
         # Convert the header/footer/nav, if they exist.
         for section in self.fn_map:
@@ -67,27 +66,40 @@ class Jala():
         # Prettify and return.
         return self.prettify()
 
+    def _new_tag(self, name, parent=None):
+        config_section = ''.join(['content.', parent or '', name, '.'])
+        matching_config = (
+            option.lstrip(config_section)
+            for option in self.config
+            if option.startswith(config_section)
+        )
+        return bs4.BeautifulSoup().new_tag(
+            name,
+            **{
+                key: value
+                for key, value in matching_config
+            }
+        )
+
+    def _convert_file(self, content, name):
+        """Convert markdown to a bs4 object, and save it to the cache."""
+        config_section = ''.join(['content.', name, '.'])
+        tag = self._new_tag(name)
+        div = self._new_tag('div', name)
+        tag.append(div)
+        html = bs4.BeautifulSoup(self.markdown.convert(content), "html5lib")
+        for child in html.body.children:
+            div.append(child)
+        self.cache[name] = tag
+
     def convert_header(self, header):
         """Convert the header to a bs4 object, and save it to the cache."""
-        htag1 = BeautifulSoup().new_tag('header',
-                role=self.config.get('content.header_role', ''))
-        htag1['class'] = self.config.get('content.header', '')
-        htag2 = BeautifulSoup().new_tag('div')
-        htag2['class'] = self.config.get('content.header_content', '')
-        htag1.append(htag2)
-        bh = BeautifulSoup(self.markdown.convert(header), "html5lib")
-        bh.html.unwrap()
-        bh.body.unwrap()
-        bh.head.extract()
-        htag2.append(bh)
-        self.cache['header'] = htag1
+        self._convert_file(header, 'header')
 
     def convert_nav(self):
         """Convert the nav to a bs4 object, and save it to the cache."""
-        ntag = BeautifulSoup().new_tag('nav',
-                role=self.config.get('content.nav_role'))
-        ntag['class'] = self.config.get('content.nav', '')
-        bn = BeautifulSoup(self.markdown.convert(nav), "html5lib")
+        ntag = self._new_tag('nav')
+        bn = bs4.BeautifulSoup(self.markdown.convert(nav), "html5lib")
         bn.html.unwrap()
         bn.body.unwrap()
         bn.head.extract()
@@ -96,29 +108,24 @@ class Jala():
 
     def convert_content(self, md):
         """Convert the content to a bs4 object, and return it."""
-        bc = BeautifulSoup(self.markdown.convert(md), "html5lib")
+        bc = bs4.BeautifulSoup(self.markdown.convert(md), "html5lib")
         bc.html.unwrap()
-        ctag1 = BeautifulSoup().new_tag('div')
-        ctag1['class'] = self.config.get('content.container', '')
+        ctag1 = self._new_tag('div', 'container')
         bc.body.wrap(ctag1)
-        ctag2 = BeautifulSoup().new_tag('div', '')
-        ctag2['class'] = self.config.get('content.row', '')
+        ctag2 = self._new_tag('div', 'row')
         bc.body.wrap(ctag2)
-        ctag3 = BeautifulSoup().new_tag('div')
-        ctag3['class'] = self.config.get('content.content', '')
+        ctag3 = self._new_tag('div', 'content')
         bc.body.wrap(ctag3)
         bc.body.unwrap()
         bc.head.extract()
         return bc
 
-    def convert_footer(self):
+    def convert_footer(self, footer):
         """Convert the footer to a bs4 object, and save it to the cache."""
-        ftag1 = BeautifulSoup().new_tag('footer')
-        ftag1['class'] = self.config.get('content.footer', '')
-        ftag2 = BeautifulSoup().new_tag('div')
-        ftag2['class'] = self.config.get('content.footer_content', '')
+        ftag1 = self._new_tag('footer')
+        ftag2 = self._new_tag('div', 'footer')
         ftag1.append(ftag2)
-        bf = BeautifulSoup(self.markdown.convert(footer), "html5lib")
+        bf = bs4.BeautifulSoup(self.markdown.convert(footer), "html5lib")
         bf.html.unwrap()
         bf.body.unwrap()
         bf.head.extract()
@@ -128,9 +135,9 @@ class Jala():
     def add_meta(self, homepage=False):
         # Add meta information.
         self.soup.html['lang'] = self.config.get('meta.lang', 'en')
-        self.soup.head.append(BeautifulSoup().new_tag('meta',
+        self.soup.head.append(bs4.BeautifulSoup().new_tag('meta',
             charset=self.config.get('meta.encoding', 'utf-8')))
-        self.soup.head.append(BeautifulSoup().new_tag('title'))
+        self.soup.head.append(bs4.BeautifulSoup().new_tag('title'))
         # Parse out the title formatter.
         site_name = self.config.get('meta.name', '')
         if homepage:
@@ -144,7 +151,7 @@ class Jala():
                     '{name}', site_name).replace('{h1}', h1_title)
         # If description exists, add it to the homepage ONLY.
         if homepage and self.config.get('meta.description', '') != '':
-            desc = BeautifulSoup().new_tag('meta',
+            desc = bs4.BeautifulSoup().new_tag('meta',
                     content=self.config.get('meta.description'))
             desc['name'] = 'description'
             self.soup.head.append(desc)
@@ -152,25 +159,25 @@ class Jala():
     def add_style(self):
         # Link in Bootstrap and jQuery.
         if self.config.get('style.jquery') == 'on':
-            self.soup.body.append(BeautifulSoup().new_tag('script',
+            self.soup.body.append(bs4.BeautifulSoup().new_tag('script',
                 src='//code.jquery.com/jquery-1.11.0.min.js'))
         if self.config.get('style.bootstrap') == 'on':
-            self.soup.head.append(BeautifulSoup().new_tag('link', rel='stylesheet',
+            self.soup.head.append(bs4.BeautifulSoup().new_tag('link', rel='stylesheet',
                 href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'))
-            self.soup.body.append(BeautifulSoup().new_tag('script',
+            self.soup.body.append(bs4.BeautifulSoup().new_tag('script',
                 src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'))
 
         # Add custom CSS and JS.
         stylesheets = self.config.get('stylesheets', [])
         for stylesheet in stylesheets:
             # Link the file.
-            self.soup.head.append(BeautifulSoup().new_tag('link', rel='stylesheet',
+            self.soup.head.append(bs4.BeautifulSoup().new_tag('link', rel='stylesheet',
                 href=os.path.join(self.style_css_path, stylesheet)))
 
         scripts = self.config.get('javascript', [])
         for script in scripts:
             # Link the file.
-            self.soup.body.append(BeautifulSoup().new_tag('script',
+            self.soup.body.append(bs4.BeautifulSoup().new_tag('script',
                 src=os.path.join(self.style_js_path, script)))
 
     def prettify(self):
@@ -183,4 +190,4 @@ class Jala():
                 # if line isn't a tag and previous line is indented and not a tag
                 html[index] = re.match("\s*", html[index - 1]).group() + line
 
-        return BeautifulSoup('\n'.join(html)).prettify()
+        return bs4.BeautifulSoup('\n'.join(html)).prettify()
