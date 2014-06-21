@@ -1,4 +1,4 @@
-Markdown
-pygit2
-html5lib
-beautifulsoup4
+Markdown==2.4
+pygit2==0.20.3
+html5lib==1.0b3
+beautifulsoup4==4.3.2
