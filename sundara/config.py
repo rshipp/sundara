@@ -2,9 +2,10 @@
 
 import os
 import shutil
-from configparser import ConfigParser
+import configparser
 
 from sundara import resources
+from sundara import exceptions
 
 USER_CONF = os.path.expanduser('~/.sundararc')
 PROJECT_CONF = '.sundararc'
@@ -22,8 +23,11 @@ class Config():
                     f.write(resources.CONFIG)
 
         # Read the config file.
-        self.config = ConfigParser()
+        self.config = configparser.ConfigParser()
         self.config.read(project_conf)
 
     def get(self, section, option):
-        return self.config.get(section, option)
+        try:
+            return self.config.get(section, option)
+        except configparser.Error as e:
+            raise exceptions.ConfigError(str(e))
