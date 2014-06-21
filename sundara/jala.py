@@ -158,14 +158,14 @@ class Jala():
 
     def add_style(self):
         # Link in Bootstrap and jQuery.
+        if self.config.get('style.jquery') == 'on':
+            self.soup.body.append(BeautifulSoup().new_tag('script',
+                src='//code.jquery.com/jquery-1.11.0.min.js'))
         if self.config.get('style.bootstrap') == 'on':
             self.soup.head.append(BeautifulSoup().new_tag('link', rel='stylesheet',
                 href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'))
             self.soup.body.append(BeautifulSoup().new_tag('script',
                 src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'))
-        if self.config.get('style.jquery') == 'on':
-            self.soup.body.append(BeautifulSoup().new_tag('script',
-                src='//code.jquery.com/jquery-1.11.0.min.js'))
 
         # Add custom CSS and JS.
         stylesheets = self.config.get('stylesheets', [])
