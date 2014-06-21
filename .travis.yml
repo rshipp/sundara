@@ -4,8 +4,9 @@ python:
   - 3.3
   - 3.4
 before_install:
-  - git clone git://github.com/libgit2/libgit2.git -b master
-  - cd libgit2 && mkdir build && cd build
+  - wget https://github.com/libgit2/libgit2/archive/v0.20.0.tar.gz
+  - tar xf v0.20.0.tar.gz
+  - cd libgit2-0.20.0 && mkdir build && cd build
   - cmake ..
   - cmake --build .
   - sudo cmake --build . --target install
