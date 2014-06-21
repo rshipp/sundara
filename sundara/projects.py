@@ -94,7 +94,6 @@ class Project():
 
         jala_args = config2kwargs(self.config.config)
         jala_args.update({
-            'dir': self.project_dir,
             'header': self.get_header(),
             'nav': self.get_nav(),
             'footer': self.get_footer(),
