@@ -96,6 +96,8 @@ class Project():
             'header': self.get_header(),
             'nav': self.get_nav(),
             'footer': self.get_footer(),
+            'stylesheets': self.get_stylesheets(),
+            'javascript': self.get_javascript(),
         })
         jala = Jala(**jala_args)
         for filename in self.get_markdown():
