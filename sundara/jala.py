@@ -161,13 +161,6 @@ class Jala():
                 src=os.path.join(self.style_js_path, script)))
 
     def prettify(self):
-        # Prettify and split.
-        html = self.soup.prettify().split('\n')
-
-        # Fix indentation for non-tag lines.
-        for index, line in enumerate(html):
-            if index > 0 and re.match("\s*[^<\s]", line) and re.match("\s+[^<\s]", html[index - 1]):
-                # if line isn't a tag and previous line is indented and not a tag
-                html[index] = re.match("\s*", html[index - 1]).group() + line
-
-        return bs4.BeautifulSoup('\n'.join(html)).prettify()
+        # FIXME: This function doesn't currently prettify anything, as
+        # I can't find a decent HTML5 tidier.
+        return str(self.soup)
